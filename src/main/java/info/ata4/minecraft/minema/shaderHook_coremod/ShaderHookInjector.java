@@ -1,4 +1,4 @@
-package info.ata4.minecraft.minema.shaderHook_coremod;
+/*package info.ata4.minecraft.minema.shaderHook_coremod;
 
 import java.util.ListIterator;
 
@@ -117,4 +117,4 @@ public final class ShaderHookInjector implements IClassTransformer {
 		return false;
 	}
 
-}
+}*/

@@ -20,6 +20,7 @@ import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
@@ -137,11 +138,16 @@ public class CaptureSession {
 		}
 	}
 
+	@SubscribeEvent
+	public void onRenderLast(RenderWorldLastEvent event) {
+	    singleton.execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(singleton));
+	}
+
 	/**
 	 * Called by ASM hook
-	 */
+	 * CHANGED: now using RWLE
 	public static void ASMmidRender() {
 		singleton.execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(singleton));
-	}
+	}*/
 
 }

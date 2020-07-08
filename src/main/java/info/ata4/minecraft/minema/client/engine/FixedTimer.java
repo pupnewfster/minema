@@ -28,14 +28,15 @@ public class FixedTimer extends Timer {
 		framesPerSecond = fps;
 		timerSpeed = speed;
 	}
-	
+
 	@Override
-	public void updateTimer(long someLastSyncNumber) {
+	public int func_238400_a_(long someLastSyncNumber) {
 		// TODO: What does lastSyncSysClock actually do and do I have to care? Was introduced in 1.13.2
 		elapsedPartialTicks += timerSpeed * (ticksPerSecond / framesPerSecond);
-		elapsedTicks = (int) elapsedPartialTicks;
+		int elapsedTicks = (int) elapsedPartialTicks;
 		elapsedPartialTicks -= elapsedTicks;
 		renderPartialTicks = elapsedPartialTicks;
+		return elapsedTicks;
 	}
 
 }

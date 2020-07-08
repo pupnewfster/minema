@@ -1,6 +1,6 @@
 package info.ata4.minecraft.minema.client.modules.modifiers;
 
-import org.lwjgl.LWJGLException;
+import org.lwjgl.glfw.GLFW;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
@@ -13,18 +13,19 @@ public class DisplaySizeModifier extends CaptureModule {
 	private boolean aaFastRenderFix;
 
 	@Override
-	protected void doEnable() throws LWJGLException {
+	protected void doEnable() {
 		MinemaConfig cfg = Minema.instance.getConfig();
-		originalWidth = Display.getWidth();
-		originalHeight = Display.getHeight();
+		originalWidth = MC.getMainWindow().getWidth();//Display.getWidth();
+		originalHeight = MC.getMainWindow().getHeight();//Display.getHeight();
 
 		aaFastRenderFix = cfg.aaFastRenderFix.get();
 
 		resize(cfg.getFrameWidth(), cfg.getFrameHeight());
 
 		if (aaFastRenderFix) {
-			Display.setDisplayMode(new DisplayMode(cfg.getFrameWidth(), cfg.getFrameHeight()));
-			Display.update();
+		    resize(cfg.getFrameWidth(), cfg.getFrameHeight());
+			//Display.setDisplayMode(new DisplayMode(cfg.getFrameWidth(), cfg.getFrameHeight()));
+			//Display.update();
 		} else {
 			// render framebuffer texture in original size
 			//if (OpenGlHelper.isFramebufferEnabled()) {
@@ -40,18 +41,20 @@ public class DisplaySizeModifier extends CaptureModule {
 	}
 
 	@Override
-	protected void doDisable() throws LWJGLException {
+	protected void doDisable() {
 		if (aaFastRenderFix) {
-			Display.setDisplayMode(new DisplayMode(originalWidth, originalHeight));
+		    resize(originalWidth, originalHeight);
+			//Display.setDisplayMode(new DisplayMode(originalWidth, originalHeight));
 			// Fix MC-68754
-			Display.setResizable(false);
-			Display.setResizable(true);
+			//Display.setResizable(false);
+			//Display.setResizable(true);
 		}
 		resize(originalWidth, originalHeight);
 	}
 
 	public void resize(int width, int height) {
-		MC.resize(width, height);
+		//MC.resize(width, height);
+		GLFW.glfwSetWindowSize(MC.getMainWindow().getHandle(), width, height);
 	}
 
 	public void setFramebufferTextureSize(int width, int height) {

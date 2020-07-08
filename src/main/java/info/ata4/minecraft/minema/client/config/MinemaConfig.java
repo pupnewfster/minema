@@ -9,7 +9,6 @@
  */
 package info.ata4.minecraft.minema.client.config;
 
-import org.jline.utils.Display;
 import info.ata4.minecraft.minema.client.config.value.CachedBooleanValue;
 import info.ata4.minecraft.minema.client.config.value.CachedDoubleValue;
 import info.ata4.minecraft.minema.client.config.value.CachedEnumValue;
@@ -23,9 +22,10 @@ import net.minecraftforge.fml.config.ModConfig.Type;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class MinemaConfig implements IMekanismConfig {
+public class MinemaConfig extends BaseMekanismConfig {
 
-	private static final int MAX_TEXTURE_SIZE = Minecraft.getGLMaximumTextureSize();
+	private static final int MAX_TEXTURE_SIZE = 1000;//Minecraft.getGLMaximumTextureSize();
+	private static final Minecraft MC = Minecraft.getInstance();
 
     private final ForgeConfigSpec configSpec;
 
@@ -58,11 +58,11 @@ public class MinemaConfig implements IMekanismConfig {
         builder.comment("General Config.").push("general");
 
 		builder.comment("Encoding Settings").push(ENCODING_CATEGORY);
-	    CachedBooleanValue useVideoEncoder = CachedBooleanValue.wrap(this, builder.define("useVideoEncoder", true));
-	    CachedStringValue videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "videoEncoderPath"));
-	    CachedStringValue videoEncoderParams = CachedStringValue.wrap(this, builder.define("videoEncoderParams",
+	    useVideoEncoder = CachedBooleanValue.wrap(this, builder.define("useVideoEncoder", true));
+	    videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "videoEncoderPath"));
+	    videoEncoderParams = CachedStringValue.wrap(this, builder.define("videoEncoderParams",
 	            "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4"));
-	    CachedEnumValue<SnapResolution> snapResolution = CachedEnumValue.wrap(this, builder.defineEnum("snapResolution", SnapResolution.MOD2));
+	    snapResolution = CachedEnumValue.wrap(this, builder.defineEnum("snapResolution", SnapResolution.MOD2));
 		builder.pop();
 
 		builder.comment("Capturing Settings").push(CAPTURING_CATEGORY);
@@ -91,7 +91,7 @@ public class MinemaConfig implements IMekanismConfig {
 
 		// use display width if not set
 		if (width == 0) {
-			width = Display.getWidth();
+			width = MC.getMainWindow().getWidth();
 		}
 
 		// snap to nearest
@@ -107,7 +107,7 @@ public class MinemaConfig implements IMekanismConfig {
 
 		// use display height if not set
 		if (height == 0) {
-			height = Display.getHeight();
+			height = MC.getMainWindow().getHeight();
 		}
 
 		// snap to nearest
@@ -119,7 +119,7 @@ public class MinemaConfig implements IMekanismConfig {
 	}
 
 	public boolean useFrameSize() {
-		return getFrameWidth() != Display.getWidth() || getFrameHeight() != Display.getHeight();
+		return getFrameWidth() != MC.getMainWindow().getWidth() || getFrameHeight() != MC.getMainWindow().getHeight();
 	}
 
     @Override
