@@ -13,7 +13,6 @@ import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.engine.FixedTimer;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
-import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.util.Timer;
 
 /**
@@ -29,7 +28,7 @@ public class TimerModifier extends CaptureModule {
 	protected void doEnable() {
 		MinemaConfig cfg = Minema.instance.getConfig();
 
-		Timer defaultTimer = PrivateAccessor.getMinecraftTimer(MC);
+		Timer defaultTimer = MC.timer;
 
 		// check if it's modified already
 		if (defaultTimer instanceof FixedTimer) {
@@ -39,15 +38,15 @@ public class TimerModifier extends CaptureModule {
 
 		// get default ticks per second if possible
 		if (defaultTimer != null) {
-			defaultTps = PrivateAccessor.getTimerTicksPerSecond(defaultTimer);
+			defaultTps = MC.timer.tickLength;
 		}
 
-		float fps = cfg.frameRate.get().floatValue();
-		float speed = cfg.engineSpeed.get().floatValue();
+		float fps = (float) cfg.frameRate.get();
+		float speed = (float) cfg.engineSpeed.get();
 
 		// set fixed delay timer
 		timer = new FixedTimer(defaultTps, fps, speed);
-		PrivateAccessor.setMinecraftTimer(MC, timer);
+		MC.timer = timer;
 	}
 
 	@Override
@@ -58,14 +57,14 @@ public class TimerModifier extends CaptureModule {
 	@Override
 	protected void doDisable() {
 		// check if it's still modified
-		if (!(PrivateAccessor.getMinecraftTimer(MC) instanceof FixedTimer)) {
+		if (!(MC.timer instanceof FixedTimer)) {
 			L.warn("Timer is already restored!");
 			return;
 		}
 
 		// restore default timer
 		timer = null;
-		PrivateAccessor.setMinecraftTimer(MC, new Timer(defaultTps, 0));
+		MC.timer = new Timer(1000F / defaultTps, 0);
 	}
 
 }

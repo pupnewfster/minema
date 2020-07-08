@@ -10,7 +10,6 @@
 package info.ata4.minecraft.minema.client.modules;
 
 import java.util.ArrayList;
-
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
@@ -40,7 +39,7 @@ public class CaptureOverlay extends CaptureModule {
 		String frame = String.valueOf(time.getNumFrames());
 		left.add("Frame: " + frame);
 
-		String fps = Minecraft.getDebugFPS() + " fps";
+		String fps = Minecraft.debugFPS + " fps";
 		left.add("Rate: " + fps);
 
 		String avg = (int) time.getAverageFPS() + " fps";
