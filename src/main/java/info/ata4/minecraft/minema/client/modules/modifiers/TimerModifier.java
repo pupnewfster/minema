@@ -45,7 +45,7 @@ public class TimerModifier extends CaptureModule {
 		float speed = (float) cfg.engineSpeed.get();
 
 		// set fixed delay timer
-		timer = new FixedTimer(defaultTps, fps, speed);
+		timer = new FixedTimer(1000F / defaultTps, fps, speed);
 		MC.timer = timer;
 	}
 
