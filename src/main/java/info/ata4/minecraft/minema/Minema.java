@@ -40,7 +40,7 @@ public class Minema {
 	public Minema() {
 		instance = this;
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPreInit);
-        MekanismConfigHelper.registerConfig(ModLoadingContext.get().getActiveContainer(), config);
+        MekanismConfigHelper.registerConfig(ModLoadingContext.get().getActiveContainer(), config = new MinemaConfig());
 	}
 
 	public void onPreInit(FMLCommonSetupEvent e) {

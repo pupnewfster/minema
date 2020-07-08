@@ -9,10 +9,14 @@
  */
 package info.ata4.minecraft.minema.client.config;
 
+import java.util.ArrayList;
+import java.util.List;
 import info.ata4.minecraft.minema.client.config.value.CachedBooleanValue;
 import info.ata4.minecraft.minema.client.config.value.CachedDoubleValue;
 import info.ata4.minecraft.minema.client.config.value.CachedEnumValue;
 import info.ata4.minecraft.minema.client.config.value.CachedIntValue;
+import info.ata4.minecraft.minema.client.config.value.CachedPrimitiveValue;
+import info.ata4.minecraft.minema.client.config.value.CachedResolvableConfigValue;
 import info.ata4.minecraft.minema.client.config.value.CachedStringValue;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -22,10 +26,13 @@ import net.minecraftforge.fml.config.ModConfig.Type;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class MinemaConfig extends BaseMekanismConfig {
+public class MinemaConfig implements IMekanismConfig {
 
 	private static final int MAX_TEXTURE_SIZE = 1000;//Minecraft.getGLMaximumTextureSize();
 	private static final Minecraft MC = Minecraft.getInstance();
+
+    private final List<CachedResolvableConfigValue<?, ?>> cachedConfigValues = new ArrayList<>();
+    private final List<CachedPrimitiveValue<?>> cachedPrimitiveValues = new ArrayList<>();
 
     private final ForgeConfigSpec configSpec;
 
@@ -59,7 +66,7 @@ public class MinemaConfig extends BaseMekanismConfig {
 
 		builder.comment("Encoding Settings").push(ENCODING_CATEGORY);
 	    useVideoEncoder = CachedBooleanValue.wrap(this, builder.define("useVideoEncoder", true));
-	    videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "videoEncoderPath"));
+	    videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "ffmpeg"));
 	    videoEncoderParams = CachedStringValue.wrap(this, builder.define("videoEncoderParams",
 	            "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4"));
 	    snapResolution = CachedEnumValue.wrap(this, builder.defineEnum("snapResolution", SnapResolution.MOD2));
@@ -134,6 +141,22 @@ public class MinemaConfig extends BaseMekanismConfig {
 
     @Override
     public Type getConfigType() {
-        return Type.SERVER;
+        return Type.CLIENT;
+    }
+
+    @Override
+    public void clearCache() {
+        cachedConfigValues.forEach(CachedResolvableConfigValue::clearCache);
+        cachedPrimitiveValues.forEach(CachedPrimitiveValue::clearCache);
+    }
+
+    @Override
+    public <T, R> void addCachedValue(CachedResolvableConfigValue<T, R> configValue) {
+        cachedConfigValues.add(configValue);
+    }
+
+    @Override
+    public <T> void addCachedValue(CachedPrimitiveValue<T> configValue) {
+        cachedPrimitiveValues.add(configValue);
     }
 }
