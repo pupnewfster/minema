@@ -20,6 +20,7 @@ import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.Phase;
@@ -141,6 +142,12 @@ public class CaptureSession {
 	@SubscribeEvent
 	public void onRenderLast(RenderWorldLastEvent event) {
 	    singleton.execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(singleton));
+	}
+
+	@SubscribeEvent
+	public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+	    // CHANGED: use event instead of ASM hack
+	    ShaderSync.setFrameTimeCounter();
 	}
 
 	/**
