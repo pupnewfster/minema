@@ -1,7 +1,7 @@
 package info.ata4.minecraft.minema.client.modules;
 
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 
 public class CaptureNotification extends CaptureModule {
 
@@ -21,7 +21,7 @@ public class CaptureNotification extends CaptureModule {
 	}
 
 	private void playChickenPlop(float pitch) {
-		MC.world.playSound(MC.player, MC.player.getPosition(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1,
+		MC.world.playSound(MC.player, MC.player.getPosX(), MC.player.getPosY(), MC.player.getPosZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1,
 				pitch);
 	}
 

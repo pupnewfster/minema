@@ -20,8 +20,8 @@ public class ShaderSync extends CaptureModule {
 	protected void doEnable() {
 		MinemaConfig cfg = Minema.instance.getConfig();
 
-		float fps = cfg.frameRate.get().floatValue();
-		float speed = cfg.engineSpeed.get().floatValue();
+		float fps = (float) cfg.frameRate.get();
+		float speed = (float) cfg.engineSpeed.get();
 
 		fixedFrameTimeCounter = PrivateAccessor.getFrameTimeCounter();
 		frameTimeCounter_step = speed / fps;

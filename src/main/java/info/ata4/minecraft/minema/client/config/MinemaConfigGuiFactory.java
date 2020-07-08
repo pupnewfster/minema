@@ -9,17 +9,17 @@
  */
 package info.ata4.minecraft.minema.client.config;
 
-import java.util.Set;
+/*import java.util.Set;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.IModGuiFactory;*/
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class MinemaConfigGuiFactory implements IModGuiFactory {
+/*public class MinemaConfigGuiFactory implements IModGuiFactory {
 
 	@Override
 	public void initialize(Minecraft mc) {
@@ -41,4 +41,4 @@ public class MinemaConfigGuiFactory implements IModGuiFactory {
 		return new MinemaConfigGui(parentScreen);
 	}
 
-}
+}*/

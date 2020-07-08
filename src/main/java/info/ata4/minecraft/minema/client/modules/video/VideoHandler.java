@@ -5,9 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import org.lwjgl.opengl.GLContext;
-
+import org.lwjgl.opengl.GL;
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
@@ -19,7 +17,6 @@ import info.ata4.minecraft.minema.client.modules.video.export.FrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.ImageFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.PipeFrameExporter;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 
 public class VideoHandler extends CaptureModule {
 
@@ -40,14 +37,14 @@ public class VideoHandler extends CaptureModule {
 	protected void doEnable() throws Exception {
 		MinemaConfig cfg = Minema.instance.getConfig();
 
-		this.startWidth = MC.displayWidth;
-		this.startHeight = MC.displayHeight;
+		this.startWidth = MC.getMainWindow().getWidth();
+		this.startHeight = MC.getMainWindow().getHeight();
 		this.colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date());
 		this.depthName = colorName.concat("depthBuffer");
 		this.recordGui = cfg.recordGui.get();
 
-		boolean usePBO = GLContext.getCapabilities().GL_ARB_pixel_buffer_object;
-		boolean useFBO = OpenGlHelper.isFramebufferEnabled();
+		boolean usePBO = GL.getCapabilities().GL_ARB_pixel_buffer_object;
+		boolean useFBO = MC.getFramebuffer() != null;
 		boolean usePipe = cfg.useVideoEncoder.get();
 		boolean recordDepth = cfg.captureDepth.get();
 
@@ -141,7 +138,7 @@ public class VideoHandler extends CaptureModule {
 
 	private float linearizeDepth(float z) {
 		final float near = 0.05f;
-		final float far = Minecraft.getMinecraft().gameSettings.renderDistanceChunks << 4;
+		final float far = Minecraft.getInstance().gameSettings.renderDistanceChunks << 4;
 		return 0.1f / (far + near - (2 * z - 1) * (far - near));
 	}
 
@@ -157,9 +154,9 @@ public class VideoHandler extends CaptureModule {
 	}
 
 	private void checkDimensions() {
-		if (MC.displayWidth != startWidth || MC.displayHeight != startHeight) {
+		if (MC.getMainWindow().getWidth() != startWidth || MC.getMainWindow().getHeight() != startHeight) {
 			throw new IllegalStateException(String.format("Display size changed! Current: %dx%d Start: %dx%d",
-					MC.displayWidth, MC.displayHeight, startWidth, startHeight));
+					MC.getMainWindow().getWidth(), MC.getMainWindow().getHeight(), startWidth, startHeight));
 		}
 	}
 

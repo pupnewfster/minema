@@ -9,104 +9,81 @@
  */
 package info.ata4.minecraft.minema.client.config;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang3.text.WordUtils;
-import org.lwjgl.opengl.Display;
-
-import info.ata4.minecraft.minema.util.config.ConfigBoolean;
-import info.ata4.minecraft.minema.util.config.ConfigDouble;
-import info.ata4.minecraft.minema.util.config.ConfigEnum;
-import info.ata4.minecraft.minema.util.config.ConfigInteger;
-import info.ata4.minecraft.minema.util.config.ConfigString;
+import org.jline.utils.Display;
+import info.ata4.minecraft.minema.client.config.value.CachedBooleanValue;
+import info.ata4.minecraft.minema.client.config.value.CachedDoubleValue;
+import info.ata4.minecraft.minema.client.config.value.CachedEnumValue;
+import info.ata4.minecraft.minema.client.config.value.CachedIntValue;
+import info.ata4.minecraft.minema.client.config.value.CachedStringValue;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraftforge.common.config.ConfigCategory;
-import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.config.IConfigElement;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.config.ModConfig.Type;
 
 /**
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class MinemaConfig {
+public class MinemaConfig implements IMekanismConfig {
 
 	private static final int MAX_TEXTURE_SIZE = Minecraft.getGLMaximumTextureSize();
 
-	private final Configuration configForge;
+    private final ForgeConfigSpec configSpec;
 
-	private final ConfigCategory ENCODING_CATEGORY;
-	private final ConfigCategory CAPTURING_CATEGORY;
-	private final ConfigCategory ENGINE_CATEGORY;
+	private final String ENCODING_CATEGORY = "encoding";
+	private final String CAPTURING_CATEGORY = "capturing";
+	private final String ENGINE_CATEGORY = "engine";
 
-	public static final String LANG_KEY = "minema.config";
+	public final CachedBooleanValue useVideoEncoder;
+	public final CachedStringValue videoEncoderPath;
+	public final CachedStringValue videoEncoderParams;
+	public final CachedEnumValue<SnapResolution> snapResolution;
 
-	public final ConfigBoolean useVideoEncoder = new ConfigBoolean(true);
-	public final ConfigString videoEncoderPath = new ConfigString("ffmpeg");
-	public final ConfigString videoEncoderParams = new ConfigString(
-			"-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4");
-	public final ConfigEnum<SnapResolution> snapResolution = new ConfigEnum<>(SnapResolution.MOD2);
+	public final CachedIntValue frameWidth;
+	public final CachedIntValue frameHeight;
+	public final CachedDoubleValue frameRate;
+	public final CachedIntValue frameLimit;
+	public final CachedStringValue capturePath;
+	public final CachedBooleanValue showOverlay;
+	public final CachedBooleanValue captureDepth;
+	public final CachedBooleanValue recordGui;
+	public final CachedBooleanValue aaFastRenderFix;
 
-	public final ConfigInteger frameWidth = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
-	public final ConfigInteger frameHeight = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
-	public final ConfigDouble frameRate = new ConfigDouble(60.0, 1.0, 240.0);
-	public final ConfigInteger frameLimit = new ConfigInteger(-1, -1);
-	public final ConfigString capturePath = new ConfigString("movies");
-	public final ConfigBoolean showOverlay = new ConfigBoolean(false);
-	public final ConfigBoolean captureDepth = new ConfigBoolean(false);
-	public final ConfigBoolean recordGui = new ConfigBoolean(true);
-	public final ConfigBoolean aaFastRenderFix = new ConfigBoolean(false);
+	public final CachedDoubleValue engineSpeed;
+	public final CachedBooleanValue syncEngine;
+	public final CachedBooleanValue preloadChunks;
+	public final CachedBooleanValue forcePreloadChunks;
 
-	public final ConfigDouble engineSpeed = new ConfigDouble(1.0, 0.01, 100.0);
-	public final ConfigBoolean syncEngine = new ConfigBoolean(true);
-	public final ConfigBoolean preloadChunks = new ConfigBoolean(true);
-	public final ConfigBoolean forcePreloadChunks = new ConfigBoolean(false);
+	public MinemaConfig() {
+	    ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.comment("General Config.").push("general");
 
-	public MinemaConfig(Configuration cfg) {
-		this.configForge = cfg;
+		builder.comment("Encoding Settings").push(ENCODING_CATEGORY);
+	    CachedBooleanValue useVideoEncoder = CachedBooleanValue.wrap(this, builder.define("useVideoEncoder", true));
+	    CachedStringValue videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "videoEncoderPath"));
+	    CachedStringValue videoEncoderParams = CachedStringValue.wrap(this, builder.define("videoEncoderParams",
+	            "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4"));
+	    CachedEnumValue<SnapResolution> snapResolution = CachedEnumValue.wrap(this, builder.defineEnum("snapResolution", SnapResolution.MOD2));
+		builder.pop();
 
-		ENCODING_CATEGORY = cfg.getCategory("encoding");
-		CAPTURING_CATEGORY = cfg.getCategory("capturing");
-		ENGINE_CATEGORY = cfg.getCategory("engine");
+		builder.comment("Capturing Settings").push(CAPTURING_CATEGORY);
+	    frameWidth = CachedIntValue.wrap(this, builder.defineInRange("frameWidth", 0, 0, MAX_TEXTURE_SIZE));
+	    frameHeight = CachedIntValue.wrap(this, builder.defineInRange("frameHeight", 0, 0, MAX_TEXTURE_SIZE));
+	    frameRate = CachedDoubleValue.wrap(this, builder.defineInRange("frameRate", 60.0, 1.0, 240.0));
+	    frameLimit = CachedIntValue.wrap(this, builder.defineInRange("frameLimit", -1, -1, Integer.MAX_VALUE));
+	    capturePath = CachedStringValue.wrap(this, builder.define("capturePath", "movies"));
+	    showOverlay = CachedBooleanValue.wrap(this, builder.define("showOverlay", false));
+	    captureDepth = CachedBooleanValue.wrap(this, builder.define("captureDepth", false));
+	    recordGui = CachedBooleanValue.wrap(this, builder.define("recordGui", true));
+	    aaFastRenderFix = CachedBooleanValue.wrap(this, builder.define("aaFastRenderFix", false));
+		builder.pop();
 
-		for (ConfigCategory category : new ConfigCategory[] { ENCODING_CATEGORY, CAPTURING_CATEGORY,
-				ENGINE_CATEGORY }) {
-			String langKey = LANG_KEY + "." + category.getName();
-			String comment = WordUtils.wrap(I18n.format(langKey + ".tooltip"), 128);
-			category.setLanguageKey(langKey);
-			category.setComment(comment);
-		}
-
-		useVideoEncoder.link(cfg, ENCODING_CATEGORY, "useVideoEncoder", LANG_KEY);
-		videoEncoderPath.link(cfg, ENCODING_CATEGORY, "videoEncoderPath", LANG_KEY);
-		videoEncoderParams.link(cfg, ENCODING_CATEGORY, "videoEncoderParams", LANG_KEY);
-		snapResolution.link(cfg, ENCODING_CATEGORY, "snapResolution", LANG_KEY);
-
-		frameWidth.link(cfg, CAPTURING_CATEGORY, "frameWidth", LANG_KEY);
-		frameHeight.link(cfg, CAPTURING_CATEGORY, "frameHeight", LANG_KEY);
-		frameRate.link(cfg, CAPTURING_CATEGORY, "frameRate", LANG_KEY);
-		frameLimit.link(cfg, CAPTURING_CATEGORY, "frameLimit", LANG_KEY);
-		capturePath.link(cfg, CAPTURING_CATEGORY, "capturePath", LANG_KEY);
-		showOverlay.link(cfg, CAPTURING_CATEGORY, "showOverlay", LANG_KEY);
-		captureDepth.link(cfg, CAPTURING_CATEGORY, "captureDepth", LANG_KEY);
-		recordGui.link(cfg, CAPTURING_CATEGORY, "recordGui", LANG_KEY);
-		aaFastRenderFix.link(cfg, CAPTURING_CATEGORY, "aaFastRenderFix", LANG_KEY);
-
-		engineSpeed.link(cfg, ENGINE_CATEGORY, "engineSpeed", LANG_KEY);
-		syncEngine.link(cfg, ENGINE_CATEGORY, "syncEngine", LANG_KEY);
-		preloadChunks.link(cfg, ENGINE_CATEGORY, "preloadChunks", LANG_KEY);
-		forcePreloadChunks.link(cfg, ENGINE_CATEGORY, "forcePreloadChunks", LANG_KEY);
-	}
-
-	public Configuration getConfigForge() {
-		return configForge;
-	}
-
-	public List<IConfigElement> getCategoryElements() {
-		return Arrays.asList(new ConfigElement(ENCODING_CATEGORY), new ConfigElement(CAPTURING_CATEGORY),
-				new ConfigElement(ENGINE_CATEGORY));
+		builder.comment("Engine Settings").push(ENGINE_CATEGORY);
+	    engineSpeed = CachedDoubleValue.wrap(this, builder.defineInRange("engineSpeed", 1.0, 0.01, 100.0));
+	    syncEngine = CachedBooleanValue.wrap(this, builder.define("syncEngine", true));
+	    preloadChunks = CachedBooleanValue.wrap(this, builder.define("preloadChunks", true));
+	    forcePreloadChunks = CachedBooleanValue.wrap(this, builder.define("forcePreloadChunks", false));
+		builder.pop();
+		configSpec = builder.build();
 	}
 
 	public int getFrameWidth() {
@@ -145,4 +122,18 @@ public class MinemaConfig {
 		return getFrameWidth() != Display.getWidth() || getFrameHeight() != Display.getHeight();
 	}
 
+    @Override
+    public String getFileName() {
+        return "general";
+    }
+
+    @Override
+    public ForgeConfigSpec getConfigSpec() {
+        return configSpec;
+    }
+
+    @Override
+    public Type getConfigType() {
+        return Type.SERVER;
+    }
 }

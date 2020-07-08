@@ -27,12 +27,12 @@ public class GameSettingsModifier extends CaptureModule {
 		GameSettings gs = MC.gameSettings;
 
 		// disable build-in framerate limit
-		framerateLimit = gs.limitFramerate;
-		gs.limitFramerate = Integer.MAX_VALUE;
+		framerateLimit = gs.framerateLimit;
+		gs.framerateLimit = Integer.MAX_VALUE;
 
 		// disable vSync
-		vSync = gs.enableVsync;
-		gs.enableVsync = false;
+		vSync = gs.vsync;
+		gs.vsync = false;
 
 		// don't pause when losing focus
 		pauseOnLostFocus = gs.pauseOnLostFocus;
@@ -43,9 +43,9 @@ public class GameSettingsModifier extends CaptureModule {
 	protected void doDisable() throws Exception {
 		// restore everything
 		GameSettings gs = MC.gameSettings;
-		gs.limitFramerate = framerateLimit;
+		gs.framerateLimit = framerateLimit;
 		gs.pauseOnLostFocus = pauseOnLostFocus;
-		gs.enableVsync = vSync;
+		gs.vsync = vSync;
 	}
 
 	@Override

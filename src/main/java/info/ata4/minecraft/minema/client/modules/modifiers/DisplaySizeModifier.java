@@ -1,14 +1,9 @@
 package info.ata4.minecraft.minema.client.modules.modifiers;
 
 import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 
 public class DisplaySizeModifier extends CaptureModule {
@@ -32,7 +27,8 @@ public class DisplaySizeModifier extends CaptureModule {
 			Display.update();
 		} else {
 			// render framebuffer texture in original size
-			if (OpenGlHelper.isFramebufferEnabled()) {
+			//if (OpenGlHelper.isFramebufferEnabled()) {
+		    if (MC.getFramebuffer() != null) {
 				setFramebufferTextureSize(originalWidth, originalHeight);
 			}
 		}

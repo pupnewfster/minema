@@ -3,19 +3,18 @@ package info.ata4.minecraft.minema.client.modules;
 import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
-
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.Utils;
 import net.minecraft.client.renderer.ViewFrustum;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
-import net.minecraft.client.renderer.chunk.CompiledChunk;
-import net.minecraft.client.renderer.chunk.RenderChunk;
+import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher.ChunkRender;
+import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher.CompiledChunk;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent.Phase;
+import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 
 public class ChunkPreloader extends CaptureModule {
 
@@ -32,18 +31,19 @@ public class ChunkPreloader extends CaptureModule {
 		}
 
 		try {
-			Iterator iterator = ((List) renderInfosField.get(MC.renderGlobal)).iterator();
-			ChunkRenderDispatcher renderDispatcher = (ChunkRenderDispatcher) renderDispatcherField.get(MC.renderGlobal);
+			Iterator iterator = ((List) renderInfosField.get(MC.worldRenderer)).iterator();
+			ChunkRenderDispatcher renderDispatcher = (ChunkRenderDispatcher) renderDispatcherField.get(MC.worldRenderer);
 
 			// 250ms timeout
-			renderDispatcher.runChunkUploads(System.nanoTime() + 250000000L);
+			// TODO: verify no timeout
+			renderDispatcher.runChunkUploads();
 
 			while (iterator.hasNext()) {
 				Object renderInfo = iterator.next();
-				RenderChunk rc = (RenderChunk) renderChunkField.get(renderInfo);
+				ChunkRender rc = (ChunkRender) renderChunkField.get(renderInfo);
 
 				if (rc.needsUpdate()) {
-					renderDispatcher.updateChunkNow(rc);
+					renderDispatcher.rebuildChunk(rc);
 					rc.clearNeedsUpdate();
 				}
 			}
@@ -75,12 +75,12 @@ public class ChunkPreloader extends CaptureModule {
 
 		if (Minema.instance.getConfig().forcePreloadChunks.get() && renderViewFrustum != null) {
 			try {
-				ChunkRenderDispatcher chunks = (ChunkRenderDispatcher) renderDispatcherField.get(MC.renderGlobal);
-				ViewFrustum frustum = (ViewFrustum) renderViewFrustum.get(MC.renderGlobal);
+				ChunkRenderDispatcher chunks = (ChunkRenderDispatcher) renderDispatcherField.get(MC.worldRenderer);
+				ViewFrustum frustum = (ViewFrustum) renderViewFrustum.get(MC.worldRenderer);
 
-				for (RenderChunk chunk : frustum.renderChunks) {
+				for (ChunkRender chunk : frustum.renderChunks) {
 					if (chunk.getCompiledChunk() == CompiledChunk.DUMMY) {
-						chunks.updateChunkNow(chunk);
+						chunks.rebuildChunk(chunk);
 					}
 				}
 			} catch (Exception e) {

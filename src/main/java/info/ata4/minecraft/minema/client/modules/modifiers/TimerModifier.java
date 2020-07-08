@@ -65,7 +65,7 @@ public class TimerModifier extends CaptureModule {
 
 		// restore default timer
 		timer = null;
-		PrivateAccessor.setMinecraftTimer(MC, new Timer(defaultTps));
+		PrivateAccessor.setMinecraftTimer(MC, new Timer(defaultTps, 0));
 	}
 
 }

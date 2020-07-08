@@ -9,16 +9,9 @@
  */
 package info.ata4.minecraft.minema.client.modules.video;
 
-import static org.lwjgl.opengl.ARBBufferObject.GL_READ_ONLY_ARB;
-import static org.lwjgl.opengl.ARBBufferObject.GL_STREAM_READ_ARB;
-import static org.lwjgl.opengl.ARBBufferObject.glBindBufferARB;
-import static org.lwjgl.opengl.ARBBufferObject.glBufferDataARB;
-import static org.lwjgl.opengl.ARBBufferObject.glDeleteBuffersARB;
-import static org.lwjgl.opengl.ARBBufferObject.glGenBuffersARB;
-import static org.lwjgl.opengl.ARBPixelBufferObject.GL_PIXEL_PACK_BUFFER_ARB;
-
 import java.nio.ByteBuffer;
-
+import org.lwjgl.opengl.ARBPixelBufferObject;
+import org.lwjgl.opengl.GL15;
 import net.minecraft.client.Minecraft;
 
 /**
@@ -27,10 +20,10 @@ import net.minecraft.client.Minecraft;
  */
 public abstract class CommonReader {
 
-	protected static final Minecraft MC = Minecraft.getMinecraft();
-	protected static final int PBO_TARGET = GL_PIXEL_PACK_BUFFER_ARB;
-	protected static final int PBO_USAGE = GL_STREAM_READ_ARB;
-	protected static final int PBO_ACCESS = GL_READ_ONLY_ARB;
+	protected static final Minecraft MC = Minecraft.getInstance();
+	protected static final int PBO_TARGET = ARBPixelBufferObject.GL_PIXEL_PACK_BUFFER_ARB;
+	protected static final int PBO_USAGE = GL15.GL_STREAM_READ;
+	protected static final int PBO_ACCESS = GL15.GL_READ_ONLY;
 
 	protected final int TYPE;
 	protected final int FORMAT;
@@ -61,15 +54,15 @@ public abstract class CommonReader {
 		bufferSize = width * height * BPP;
 
 		if (isPBO) {
-			frontName = glGenBuffersARB();
-			glBindBufferARB(PBO_TARGET, frontName);
-			glBufferDataARB(PBO_TARGET, bufferSize, PBO_USAGE);
+			frontName = GL15.glGenBuffers();
+			GL15.glBindBuffer(PBO_TARGET, frontName);
+			GL15.glBufferData(PBO_TARGET, bufferSize, PBO_USAGE);
 
-			backName = glGenBuffersARB();
-			glBindBufferARB(PBO_TARGET, backName);
-			glBufferDataARB(PBO_TARGET, bufferSize, PBO_USAGE);
+			backName = GL15.glGenBuffers();
+			GL15.glBindBuffer(PBO_TARGET, backName);
+			GL15.glBufferData(PBO_TARGET, bufferSize, PBO_USAGE);
 
-			glBindBufferARB(PBO_TARGET, 0);
+			GL15.glBindBuffer(PBO_TARGET, 0);
 
 			firstFrame = true;
 		} else {
@@ -82,8 +75,8 @@ public abstract class CommonReader {
 
 	public void destroy() {
 		if (isPBO) {
-			glDeleteBuffersARB(frontName);
-			glDeleteBuffersARB(backName);
+			GL15.glDeleteBuffers(frontName);
+			GL15.glDeleteBuffers(backName);
 		}
 	}
 

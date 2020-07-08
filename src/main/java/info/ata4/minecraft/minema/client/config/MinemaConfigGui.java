@@ -1,4 +1,4 @@
-package info.ata4.minecraft.minema.client.config;
+/*package info.ata4.minecraft.minema.client.config;
 
 import info.ata4.minecraft.minema.Minema;
 import net.minecraft.client.gui.GuiScreen;
@@ -12,3 +12,4 @@ public class MinemaConfigGui extends GuiConfig {
 	}
 
 }
+*/
