@@ -98,7 +98,7 @@ public class MinemaConfig implements IMekanismConfig {
 
 		// use display width if not set
 		if (width == 0) {
-			width = MC.getMainWindow().getWidth();
+			width = MC.getMainWindow().getFramebufferWidth();
 		}
 
 		// snap to nearest
@@ -114,7 +114,7 @@ public class MinemaConfig implements IMekanismConfig {
 
 		// use display height if not set
 		if (height == 0) {
-			height = MC.getMainWindow().getHeight();
+			height = MC.getMainWindow().getFramebufferHeight();
 		}
 
 		// snap to nearest
@@ -126,7 +126,7 @@ public class MinemaConfig implements IMekanismConfig {
 	}
 
 	public boolean useFrameSize() {
-		return getFrameWidth() != MC.getMainWindow().getWidth() || getFrameHeight() != MC.getMainWindow().getHeight();
+		return getFrameWidth() != MC.getMainWindow().getFramebufferWidth() || getFrameHeight() != MC.getMainWindow().getFramebufferHeight();
 	}
 
     @Override

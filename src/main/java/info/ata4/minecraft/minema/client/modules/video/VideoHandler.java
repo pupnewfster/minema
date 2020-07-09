@@ -37,8 +37,8 @@ public class VideoHandler extends CaptureModule {
 	protected void doEnable() throws Exception {
 		MinemaConfig cfg = Minema.instance.getConfig();
 
-		this.startWidth = MC.getMainWindow().getWidth();
-		this.startHeight = MC.getMainWindow().getHeight();
+		this.startWidth = MC.getMainWindow().getFramebufferWidth();
+		this.startHeight = MC.getMainWindow().getFramebufferHeight();
 		this.colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date());
 		this.depthName = colorName.concat("depthBuffer");
 		this.recordGui = cfg.recordGui.get();
@@ -154,9 +154,9 @@ public class VideoHandler extends CaptureModule {
 	}
 
 	private void checkDimensions() {
-		if (MC.getMainWindow().getWidth() != startWidth || MC.getMainWindow().getHeight() != startHeight) {
+		if (MC.getMainWindow().getFramebufferWidth() != startWidth || MC.getMainWindow().getFramebufferHeight() != startHeight) {
 			throw new IllegalStateException(String.format("Display size changed! Current: %dx%d Start: %dx%d",
-					MC.getMainWindow().getWidth(), MC.getMainWindow().getHeight(), startWidth, startHeight));
+					MC.getMainWindow().getFramebufferWidth(), MC.getMainWindow().getFramebufferHeight(), startWidth, startHeight));
 		}
 	}
 
