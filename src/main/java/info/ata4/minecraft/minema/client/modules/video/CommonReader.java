@@ -28,7 +28,6 @@ public abstract class CommonReader {
 	protected final int TYPE;
 	protected final int FORMAT;
 	protected final boolean isPBO;
-	protected final boolean isFBO;
 
 	public final int width;
 	public final int height;
@@ -43,11 +42,10 @@ public abstract class CommonReader {
 	protected int backName;
 	protected boolean firstFrame;
 
-	public CommonReader(int width, int height, int BPP, int TYPE, int FORMAT, boolean isPBO, boolean isFBO) {
+	public CommonReader(int width, int height, int BPP, int TYPE, int FORMAT, boolean isPBO) {
 		this.TYPE = TYPE;
 		this.FORMAT = FORMAT;
 		this.isPBO = isPBO;
-		this.isFBO = isFBO;
 		this.width = width;
 		this.height = height;
 

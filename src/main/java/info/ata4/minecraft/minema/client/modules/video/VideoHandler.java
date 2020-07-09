@@ -44,15 +44,14 @@ public class VideoHandler extends CaptureModule {
 		this.recordGui = cfg.recordGui.get();
 
 		boolean usePBO = GL.getCapabilities().GL_ARB_pixel_buffer_object;
-		boolean useFBO = MC.getFramebuffer() != null;
 		boolean usePipe = cfg.useVideoEncoder.get();
 		boolean recordDepth = cfg.captureDepth.get();
 
-		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO, useFBO);
+		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO);
 		colorExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
 
 		if (recordDepth) {
-			depthReader = new DepthbufferReader(startWidth, startHeight, usePBO, useFBO);
+			depthReader = new DepthbufferReader(startWidth, startHeight, usePBO);
 			depthExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
 			depthRemapping = ByteBuffer.allocateDirect(startWidth * startHeight * 3);
 			depthRemapping.rewind();

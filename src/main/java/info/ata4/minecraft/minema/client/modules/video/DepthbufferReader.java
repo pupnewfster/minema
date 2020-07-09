@@ -7,11 +7,12 @@ import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL11.glReadPixels;
 import org.lwjgl.opengl.GL15;
+import info.ata4.minecraft.minema.Utils;
 
 public class DepthbufferReader extends CommonReader {
 
-	public DepthbufferReader(int width, int height, boolean isPBO, boolean isFBO) {
-		super(width, height, 4, GL_FLOAT, GL_DEPTH_COMPONENT, isPBO, isFBO);
+	public DepthbufferReader(int width, int height, boolean isPBO) {
+		super(width, height, 4, GL_FLOAT, GL_DEPTH_COMPONENT, isPBO);
 	}
 
 	@Override
@@ -34,12 +35,7 @@ public class DepthbufferReader extends CommonReader {
 			GL15.glBindBuffer(PBO_TARGET, 0);
 
 			// If mapping threw an error -> crash immediately please
-			int err = GL15.glGetError();
-			if (err != 0) {
-			    System.err.println("OpenGL returned non-zero error code: " + err);
-			    Thread.dumpStack();
-			    System.exit(0);
-			}
+			Utils.checkGlError();
 
 			// swap PBOs
 			int swapName = frontName;

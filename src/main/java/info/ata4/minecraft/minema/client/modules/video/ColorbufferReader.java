@@ -6,7 +6,6 @@ import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glGetTexImage;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
-import static org.lwjgl.opengl.GL11.glReadPixels;
 import static org.lwjgl.opengl.GL12.GL_BGR;
 import org.lwjgl.opengl.GL15;
 import info.ata4.minecraft.minema.Utils;
@@ -14,8 +13,8 @@ import net.minecraft.client.shader.Framebuffer;
 
 public class ColorbufferReader extends CommonReader {
 
-	public ColorbufferReader(int width, int height, boolean isPBO, boolean isFBO) {
-		super(width, height, 3, GL_UNSIGNED_BYTE, GL_BGR, isPBO, isFBO);
+	public ColorbufferReader(int width, int height, boolean isPBO) {
+		super(width, height, 3, GL_UNSIGNED_BYTE, GL_BGR, isPBO);
 	}
 
 	@Override
@@ -26,15 +25,10 @@ public class ColorbufferReader extends CommonReader {
 
 		if (isPBO) {
 			GL15.glBindBuffer(PBO_TARGET, frontName);
-
-			if (isFBO) {
-				Framebuffer fb = MC.getFramebuffer();
-				fb.bindFramebufferTexture();
-				glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, 0);
-				fb.unbindFramebufferTexture();
-			} else {
-				glReadPixels(0, 0, width, height, FORMAT, TYPE, 0);
-			}
+			Framebuffer fb = MC.getFramebuffer();
+			fb.bindFramebufferTexture();
+			glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, 0);
+			fb.unbindFramebufferTexture();
 
 			// copy back-buffer
 			GL15.glBindBuffer(PBO_TARGET, backName);
@@ -50,14 +44,10 @@ public class ColorbufferReader extends CommonReader {
 			frontName = backName;
 			backName = swapName;
 		} else {
-			if (isFBO) {
-				Framebuffer fb = MC.getFramebuffer();
-				fb.bindFramebufferTexture();
-				glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, buffer);
-				fb.unbindFramebufferTexture();
-			} else {
-				glReadPixels(0, 0, width, height, FORMAT, TYPE, buffer);
-			}
+			Framebuffer fb = MC.getFramebuffer();
+			fb.bindFramebufferTexture();
+			glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, buffer);
+			fb.unbindFramebufferTexture();
 		}
 
 		buffer.rewind();

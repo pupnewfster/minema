@@ -29,9 +29,7 @@ public class DisplaySizeModifier extends CaptureModule {
 		} else {
 			// render framebuffer texture in original size
 			//if (OpenGlHelper.isFramebufferEnabled()) {
-		    if (MC.getFramebuffer() != null) {
-				setFramebufferTextureSize(originalWidth, originalHeight);
-			}
+			setFramebufferTextureSize(originalWidth, originalHeight);
 		}
 	}
 
