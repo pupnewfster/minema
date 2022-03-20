@@ -1,15 +1,15 @@
 package info.ata4.minecraft.minema.client.config.value;
 
-import info.ata4.minecraft.minema.client.config.IMekanismConfig;
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class CachedStringValue extends CachedResolvableConfigValue<String, String> {
 
-    private CachedStringValue(IMekanismConfig config, ConfigValue<String> internal) {
+    private CachedStringValue(MinemaConfig config, ConfigValue<String> internal) {
         super(config, internal);
     }
 
-    public static CachedStringValue wrap(IMekanismConfig config, ConfigValue<String> internal) {
+    public static CachedStringValue wrap(MinemaConfig config, ConfigValue<String> internal) {
         return new CachedStringValue(config, internal);
     }
 

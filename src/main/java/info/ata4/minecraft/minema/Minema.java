@@ -1,72 +1,51 @@
 package info.ata4.minecraft.minema;
 
-import org.lwjgl.glfw.GLFW;
-import info.ata4.minecraft.minema.client.config.MekanismConfigHelper;
+import info.ata4.minecraft.minema.client.config.ConfigHandler;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
-import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.command.Commands;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import java.nio.file.Path;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 /**
- * Most of the files in this repo do have the old copyright notice about
- * Barracuda even though I have touched most of it, in some cases substantially.
- * Few classes do not contain the notice, these are the ones that I have written
- * completely myself or some of the class with substantial changes.
+ * Most of the files in this repo do have the old copyright notice about Barracuda even though I have touched most of it, in some cases substantially. Few classes do not
+ * contain the notice, these are the ones that I have written completely myself or some of the class with substantial changes.
  *
  * @author Gregosteros (minecraftforum) / daipenger (github)
  */
 @Mod(Minema.MODID)
-@OnlyIn(Dist.CLIENT)
 public class Minema {
 
-	public static final String MODID = "minema";
+    public static final String MODID = "minema";
+    public static final Path CONFIG_DIR = FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(Minema.MODID), Minema.MODID);
 
-	private static final String category = "key.categories.minema";
-	private static final KeyBinding KEY_CAPTURE = new KeyBinding("key.minema.capture", GLFW.GLFW_KEY_F4, category);
+    public static Minema instance;
+    private final MinemaConfig config;
 
-	public static Minema instance;
-	private MinemaConfig config;
+    public Minema() {
+        instance = this;
+        ModContainer modContainer = ModLoadingContext.get().getActiveContainer();
+        modContainer.addConfig(new ConfigHandler(modContainer, config = new MinemaConfig()));
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(this::onConfigLoad);
+    }
 
-	public Minema() {
-		instance = this;
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onPreInit);
-        MekanismConfigHelper.registerConfig(ModLoadingContext.get().getActiveContainer(), config = new MinemaConfig());
-	}
+    public MinemaConfig getConfig() {
+        return config;
+    }
 
-	public void onPreInit(FMLCommonSetupEvent e) {
-		ClientRegistry.registerKeyBinding(KEY_CAPTURE);
-		MinecraftForge.EVENT_BUS.register(this);
-	}
-
-	public void onServerInit(FMLServerStartingEvent e) {
-		e.getCommandDispatcher().register(Commands.literal("minema").then(Commands.literal("enable").executes(c -> {
-			CaptureSession.singleton.startCapture();
-			return 0;
-		})).then(Commands.literal("disable").executes(c -> {
-			CaptureSession.singleton.stopCapture();
-			return 0;
-		})));
-	}
-
-	@SubscribeEvent
-	public void onKeyInput(KeyInputEvent event) {
-		if (KEY_CAPTURE.isPressed())
-			if (!CaptureSession.singleton.startCapture())
-				CaptureSession.singleton.stopCapture();
-	}
-
-	public MinemaConfig getConfig() {
-		return config;
-	}
-
+    private void onConfigLoad(ModConfigEvent configEvent) {
+        //Note: We listen to both the initial load and the reload, to make sure that we fix any accidentally
+        // cached values from calls before the initial loading
+        ModConfig config = configEvent.getConfig();
+        //Make sure it is for the same modid as us
+        if (config.getModId().equals(MODID) && config instanceof ConfigHandler handler) {
+            handler.clearCache();
+        }
+    }
 }

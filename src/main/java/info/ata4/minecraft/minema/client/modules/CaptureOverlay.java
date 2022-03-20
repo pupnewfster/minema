@@ -9,10 +9,10 @@
  */
 package info.ata4.minecraft.minema.client.modules;
 
-import java.util.ArrayList;
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
+import java.util.ArrayList;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,46 +25,46 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public class CaptureOverlay extends CaptureModule {
 
-	@SubscribeEvent
-	public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
-		CaptureTime time = CaptureSession.singleton.getTime();
+    @SubscribeEvent
+    public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
+        CaptureTime time = CaptureSession.singleton.getTime();
 
-		ArrayList<String> left = evt.getLeft();
+        ArrayList<String> left = evt.getLeft();
 
-		if (MC.gameSettings.showDebugInfo) {
-			// F3 menu is open -> add spacer
-			left.add("");
-		}
+        if (MC.options.renderDebug) {
+            // F3 menu is open -> add spacer
+            left.add("");
+        }
 
-		String frame = String.valueOf(time.getNumFrames());
-		left.add("Frame: " + frame);
+        String frame = String.valueOf(time.getNumFrames());
+        left.add("Frame: " + frame);
 
-		String fps = Minecraft.debugFPS + " fps";
-		left.add("Rate: " + fps);
+        String fps = Minecraft.fps + " fps";
+        left.add("Rate: " + fps);
 
-		String avg = (int) time.getAverageFPS() + " fps";
-		left.add("Avg.: " + avg);
+        String avg = (int) time.getAverageFPS() + " fps";
+        left.add("Avg.: " + avg);
 
-		String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
-		left.add("Delay: " + delay);
+        String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
+        left.add("Delay: " + delay);
 
-		left.add("Time R: " + time.getRealTimeString());
-		left.add("Time V: " + time.getVideoTimeString());
-	}
+        left.add("Time R: " + time.getRealTimeString());
+        left.add("Time V: " + time.getVideoTimeString());
+    }
 
-	@Override
-	protected void doEnable() throws Exception {
-		MinecraftForge.EVENT_BUS.register(this);
-	}
+    @Override
+    protected void doEnable() throws Exception {
+        MinecraftForge.EVENT_BUS.register(this);
+    }
 
-	@Override
-	protected void doDisable() throws Exception {
-		MinecraftForge.EVENT_BUS.unregister(this);
-	}
+    @Override
+    protected void doDisable() throws Exception {
+        MinecraftForge.EVENT_BUS.unregister(this);
+    }
 
-	@Override
-	protected boolean checkEnable() {
-		return Minema.instance.getConfig().showOverlay.get();
-	}
+    @Override
+    protected boolean checkEnable() {
+        return Minema.instance.getConfig().showOverlay.get();
+    }
 
 }

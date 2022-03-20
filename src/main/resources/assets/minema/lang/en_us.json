@@ -1,0 +1,66 @@
+{
+  "minema.error.label": "Recording error:",
+
+  "key.categories.minema": "Minema",
+  "key.minema.capture": "Start/stop recording",
+
+  "minema.config.encoding": "Encoding",
+  "minema.config.encoding.tooltip": "Settings for video encoding.",
+
+  "minema.config.capturing": "Capturing",
+  "minema.config.capturing.tooltip": "Settings for video recording.",
+
+  "minema.config.engine": "Engine Overrides",
+  "minema.config.engine.tooltip": "Advanced engine override settings used during recording.",
+
+  "minema.config.useVideoEncoder": "Use Video Encoder",
+  "minema.config.useVideoEncoder.tooltip": "If enabled, a video encoding program is used that will receive uncompressed BGR24 frames from Minema via the standard input pipe.",
+
+  "minema.config.videoEncoderPath": "Encoder Path",
+  "minema.config.videoEncoderPath.tooltip": "Path to the video encoding executable. The encoder's working directory is the generated movie folder. Ignored if the video encoder is disabled.",
+
+  "minema.config.videoEncoderParams": "Encoder Arguments",
+  "minema.config.videoEncoderParams.tooltip": "Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use. Ignored if the video encoder is disabled.",
+
+  "minema.config.snapResolution": "Snap Resolution",
+  "minema.config.snapResolution.tooltip": "If necessary, snaps the recording resolution to the next lower resolution so that width and height is divisible by this modulus. FFMpeg only needs mod2, some other encoders might need more.",
+
+  "minema.config.frameWidth": "Frame Width",
+  "minema.config.frameWidth.tooltip": "Width of every captured frame in pixels. Set to 0 to use the current window/display width. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
+
+  "minema.config.frameHeight": "Frame Height",
+  "minema.config.frameHeight.tooltip": "Height of every captured frame in pixels. Set to 0 to use the current window/display height. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
+
+  "minema.config.frameRate": "Frame Rate",
+  "minema.config.frameRate.tooltip": "Recording frame rate, sets the amount of frames recorded per in-game second. Floating point values are allowed, e.g. 23.976 for 24p NTSC. Because Minecraft operates at 20 ticks per second, frame rates with multiples of 20 are recommended for best smoothness.",
+
+  "minema.config.frameLimit": "Frame Limit",
+  "minema.config.frameLimit.tooltip": "Number of frames to capture before stopping automatically. -1 means no limit.",
+
+  "minema.config.capturePath": "Capture Path",
+  "minema.config.capturePath.tooltip": "Path were the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.",
+
+  "minema.config.showOverlay": "Show Overlay",
+  "minema.config.showOverlay.tooltip": "If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.",
+
+  "minema.config.captureDepth": "Capture depth buffer",
+  "minema.config.captureDepth.tooltip": "If enabled, the depth buffer is captured linearly. Warning: Certain tricks are not available for this buffer so this is quite slow!",
+
+  "minema.config.recordGui": "Record GUI",
+  "minema.config.recordGui.tooltip": "If disabled, the GUI (hotbar, hand, crosshair, etc) will not be recorded.",
+
+  "minema.config.aaFastRenderFix": "Antialiasing and fast render fix",
+  "minema.config.aaFastRenderFix.tooltip": "Enable to fix broken recordings when using optifine's antialiasing or fast render together with a custom resolution. Resizes the whole application window as a workaround.",
+
+  "minema.config.engineSpeed": "Engine Speed",
+  "minema.config.engineSpeed.tooltip": "Speed modifier for the game clock. The default is 1.0, which equals 20 ticks per second. Lower or higher values will speed up or slow down the game time. 2.5, for example, results in two and a half of the normal speed. Useful for slow motion or time lapse effects. Ignored if the capturing is unsynchronized.",
+
+  "minema.config.syncEngine": "Synchronize",
+  "minema.config.syncEngine.tooltip": "If enabled, the local server and client runs synchronously to the video capturing frame rate. This effectively turns Minecraft into an offline renderer and allows rendering and capturing of extremely complex scenes. This ShaderSync version also synchronizes the shader mod by karyonix (compatible with Optifine, too). ONLY WORKS ON LOCAL WORLDS!",
+
+  "minema.config.preloadChunks": "Preload Chunks",
+  "minema.config.preloadChunks.tooltip": "If enabled, Minema will heavily accelerate the chunk loading rate during recording. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!",
+
+  "minema.config.forcePreloadChunks": "Force preload chunks",
+  "minema.config.forcePreloadChunks.tooltip": "If Preload Chunks is enabled and this is also enabled, all chunks in render distance will be preloaded. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!"
+}

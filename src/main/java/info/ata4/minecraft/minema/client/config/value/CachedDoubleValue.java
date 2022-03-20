@@ -1,18 +1,18 @@
 package info.ata4.minecraft.minema.client.config.value;
 
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import java.util.function.DoubleSupplier;
-import info.ata4.minecraft.minema.client.config.IMekanismConfig;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class CachedDoubleValue extends CachedPrimitiveValue<Double> implements DoubleSupplier {
 
     private double cachedValue;
 
-    private CachedDoubleValue(IMekanismConfig config, ConfigValue<Double> internal) {
+    private CachedDoubleValue(MinemaConfig config, ConfigValue<Double> internal) {
         super(config, internal);
     }
 
-    public static CachedDoubleValue wrap(IMekanismConfig config, ConfigValue<Double> internal) {
+    public static CachedDoubleValue wrap(MinemaConfig config, ConfigValue<Double> internal) {
         return new CachedDoubleValue(config, internal);
     }
 

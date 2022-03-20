@@ -1,28 +1,30 @@
 package info.ata4.minecraft.minema.client.modules;
 
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 public class CaptureNotification extends CaptureModule {
 
-	@Override
-	protected void doEnable() throws Exception {
-		playChickenPlop(1);
-	}
+    @Override
+    protected void doEnable() {
+        playChickenPlop(1);
+    }
 
-	@Override
-	protected void doDisable() throws Exception {
-		playChickenPlop(0.75f);
-	}
+    @Override
+    protected void doDisable() {
+        playChickenPlop(0.75f);
+    }
 
-	@Override
-	protected boolean checkEnable() {
-		return true;
-	}
+    @Override
+    protected boolean checkEnable() {
+        return true;
+    }
 
-	private void playChickenPlop(float pitch) {
-		MC.world.playSound(MC.player, MC.player.getPosX(), MC.player.getPosY(), MC.player.getPosZ(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1,
-				pitch);
-	}
+    private void playChickenPlop(float pitch) {
+        if (MC.level != null && MC.player != null) {
+            MC.level.playSound(MC.player, MC.player.getX(), MC.player.getY(), MC.player.getZ(), SoundEvents.CHICKEN_EGG, SoundSource.NEUTRAL, 1,
+                  pitch);
+        }
+    }
 
 }

@@ -4,8 +4,7 @@ import info.ata4.minecraft.minema.CaptureSession;
 
 public class EndRenderEvent extends CaptureEvent {
 
-	public EndRenderEvent(CaptureSession session) {
-		super(session);
-	}
-
+    public EndRenderEvent(CaptureSession session) {
+        super(session);
+    }
 }

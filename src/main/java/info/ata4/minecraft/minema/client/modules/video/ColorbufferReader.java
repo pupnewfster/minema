@@ -7,58 +7,59 @@ import static org.lwjgl.opengl.GL11.GL_UNSIGNED_BYTE;
 import static org.lwjgl.opengl.GL11.glGetTexImage;
 import static org.lwjgl.opengl.GL11.glPixelStorei;
 import static org.lwjgl.opengl.GL12.GL_BGR;
-import org.lwjgl.opengl.GL15;
+
+import com.mojang.blaze3d.pipeline.RenderTarget;
 import info.ata4.minecraft.minema.Utils;
-import net.minecraft.client.shader.Framebuffer;
+import org.lwjgl.opengl.GL15;
 
 public class ColorbufferReader extends CommonReader {
 
-	public ColorbufferReader(int width, int height, boolean isPBO) {
-		super(width, height, 3, GL_UNSIGNED_BYTE, GL_BGR, isPBO);
-	}
+    public ColorbufferReader(int width, int height, boolean isPBO) {
+        super(width, height, 3, GL_UNSIGNED_BYTE, GL_BGR, isPBO);
+    }
 
-	@Override
-	public boolean readPixels() {
-		// set alignment flags
-		glPixelStorei(GL_PACK_ALIGNMENT, 1);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    @Override
+    public boolean readPixels() {
+        // set alignment flags
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-		if (isPBO) {
-			GL15.glBindBuffer(PBO_TARGET, frontName);
-			Framebuffer fb = MC.getFramebuffer();
-			fb.bindFramebufferTexture();
-			glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, 0);
-			fb.unbindFramebufferTexture();
+        if (isPBO) {
+            GL15.glBindBuffer(PBO_TARGET, frontName);
+            RenderTarget fb = MC.getMainRenderTarget();
+            fb.bindRead();
+            glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, 0);
+            fb.unbindRead();
 
-			// copy back-buffer
-			GL15.glBindBuffer(PBO_TARGET, backName);
-			buffer = GL15.glMapBuffer(PBO_TARGET, PBO_ACCESS, bufferSize, buffer);
-			GL15.glUnmapBuffer(PBO_TARGET);
-			GL15.glBindBuffer(PBO_TARGET, 0);
+            // copy back-buffer
+            GL15.glBindBuffer(PBO_TARGET, backName);
+            buffer = GL15.glMapBuffer(PBO_TARGET, PBO_ACCESS, bufferSize, buffer);
+            GL15.glUnmapBuffer(PBO_TARGET);
+            GL15.glBindBuffer(PBO_TARGET, 0);
 
-			// If mapping threw an error -> crash immediately please
+            // If mapping threw an error -> crash immediately please
             Utils.checkGlError();
 
-			// swap PBOs
-			int swapName = frontName;
-			frontName = backName;
-			backName = swapName;
-		} else {
-			Framebuffer fb = MC.getFramebuffer();
-			fb.bindFramebufferTexture();
-			glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, buffer);
-			fb.unbindFramebufferTexture();
-		}
+            // swap PBOs
+            int swapName = frontName;
+            frontName = backName;
+            backName = swapName;
+        } else {
+            RenderTarget fb = MC.getMainRenderTarget();
+            fb.bindRead();
+            glGetTexImage(GL_TEXTURE_2D, 0, FORMAT, TYPE, buffer);
+            fb.unbindRead();
+        }
 
-		buffer.rewind();
+        buffer.rewind();
 
-		// first frame is empty in PBO mode, don't export it
-		if (isPBO & firstFrame) {
-			firstFrame = false;
-			return false;
-		}
+        // first frame is empty in PBO mode, don't export it
+        if (isPBO & firstFrame) {
+            firstFrame = false;
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
 }

@@ -9,7 +9,7 @@
  */
 package info.ata4.minecraft.minema.client.engine;
 
-import net.minecraft.util.Timer;
+import net.minecraft.client.Timer;
 
 /**
  * Extension of Minecraft's default timer for fixed framerate rendering.
@@ -18,25 +18,24 @@ import net.minecraft.util.Timer;
  */
 public class FixedTimer extends Timer {
 
-	private final float ticksPerSecond;
-	private final float framesPerSecond;
-	private final float timerSpeed;
+    private final float ticksPerSecond;
+    private final float framesPerSecond;
+    private final float timerSpeed;
 
-	public FixedTimer(float tps, float fps, float speed) {
-		super(tps, 0);
-		ticksPerSecond = tps;
-		framesPerSecond = fps;
-		timerSpeed = speed;
-	}
+    public FixedTimer(float tps, float fps, float speed) {
+        super(tps, 0);
+        ticksPerSecond = tps;
+        framesPerSecond = fps;
+        timerSpeed = speed;
+    }
 
-	@Override
-	public int func_238400_a_(long someLastSyncNumber) {
-		// TODO: What does lastSyncSysClock actually do and do I have to care? Was introduced in 1.13.2
-		elapsedPartialTicks += timerSpeed * (ticksPerSecond / framesPerSecond);
-		int elapsedTicks = (int) elapsedPartialTicks;
-		elapsedPartialTicks -= elapsedTicks;
-		renderPartialTicks = elapsedPartialTicks;
-		return elapsedTicks;
-	}
-
+    @Override
+    public int advanceTime(long someLastSyncNumber) {
+        // TODO: What does lastSyncSysClock actually do and do I have to care? Was introduced in 1.13.2
+        tickDelta += timerSpeed * (ticksPerSecond / framesPerSecond);
+        int elapsedTicks = (int) tickDelta;
+        tickDelta -= elapsedTicks;
+        partialTick = tickDelta;
+        return elapsedTicks;
+    }
 }

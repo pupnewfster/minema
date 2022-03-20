@@ -1,18 +1,18 @@
 package info.ata4.minecraft.minema.client.config.value;
 
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import java.util.function.BooleanSupplier;
-import info.ata4.minecraft.minema.client.config.IMekanismConfig;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class CachedBooleanValue extends CachedPrimitiveValue<Boolean> implements BooleanSupplier {
 
     private boolean cachedValue;
 
-    private CachedBooleanValue(IMekanismConfig config, ConfigValue<Boolean> internal) {
+    private CachedBooleanValue(MinemaConfig config, ConfigValue<Boolean> internal) {
         super(config, internal);
     }
 
-    public static CachedBooleanValue wrap(IMekanismConfig config, ConfigValue<Boolean> internal) {
+    public static CachedBooleanValue wrap(MinemaConfig config, ConfigValue<Boolean> internal) {
         return new CachedBooleanValue(config, internal);
     }
 

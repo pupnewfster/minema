@@ -1,18 +1,18 @@
 package info.ata4.minecraft.minema.client.config.value;
 
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import java.util.function.IntSupplier;
-import info.ata4.minecraft.minema.client.config.IMekanismConfig;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 
 public class CachedIntValue extends CachedPrimitiveValue<Integer> implements IntSupplier {
 
     private int cachedValue;
 
-    private CachedIntValue(IMekanismConfig config, ConfigValue<Integer> internal) {
+    private CachedIntValue(MinemaConfig config, ConfigValue<Integer> internal) {
         super(config, internal);
     }
 
-    public static CachedIntValue wrap(IMekanismConfig config, ConfigValue<Integer> internal) {
+    public static CachedIntValue wrap(MinemaConfig config, ConfigValue<Integer> internal) {
         return new CachedIntValue(config, internal);
     }
 
