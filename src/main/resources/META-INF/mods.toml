@@ -1,11 +1,23 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="${loader_version}"
+issueTrackerURL="https://github.com/pupnewfster/minema/issues"
 license="The Unlicense"
 
 [[mods]]
     modId="minema"
-    version="${file.jarVersion}"
-    displayName="Minema"
-    displayURL="https://github.com/daipenger/minema"
+version="${version}"
+    displayName="Minema Resurrection"
+    displayURL="https://github.com/pupnewfster/minema"
     authors="Barracuda, Gregosteros"
+    credits="Aidancbrady, pupnewfster"
     description='''This mod allows you to record fluid movies in Minecraft, even if the video recording itself is not.'''
+[[dependencies.minema]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${mc_version}"
+    side="BOTH"
+[[dependencies.minema]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version}"
+    side="BOTH"

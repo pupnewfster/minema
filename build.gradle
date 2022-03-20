@@ -1,3 +1,6 @@
+import groovy.json.JsonOutput
+import groovy.json.JsonSlurper
+
 buildscript {
     repositories {
         maven {
@@ -29,24 +32,61 @@ wrapper {
     distributionType = Wrapper.DistributionType.ALL
 }
 
-version = "1.18.2"
-archivesBaseName = "Minema"
+defaultTasks 'build'
+
+idea {
+    module {
+        //Exclude directories from being managed
+        for (String excludeDirName in ["run", "out", "logs", "gradle"]) {
+            excludeDirs.add(new File(projectDir, excludeDirName))
+        }
+    }
+}
+
+ext {
+    versionProperties = ["version"       : mod_version, "mc_version": minecraft_version_range, "forge_version": forge_version_range,
+                         "loader_version": loader_version_range]
+    jsonPatterns = ["**/*.json", "**/*.mcmeta"]
+}
+
+def replaceResources = tasks.register("replaceResources", Copy) {
+    it.outputs.upToDateWhen { false }
+    def modsToml = copySpec {
+        from(sourceSets.main.resources) {
+            include "META-INF/mods.toml"
+            expand versionProperties
+        }
+    }
+    //Copy it into the build dir
+    it.with modsToml
+    it.into "$buildDir/resources/main/"
+    //If IntelliJ's output dir exists, copy it there as well
+    if (new File("$rootDir/out/production/").exists()) {
+        copy {
+            with modsToml
+            into "$rootDir/out/production/"
+        }
+    }
+    //If Eclipse's output dir exists, copy it there as well
+    if (new File("$rootDir/bin/main/").exists()) {
+        copy {
+            with modsToml
+            into "$rootDir/bin/main/"
+        }
+    }
+}
+
+version = "${minecraft_version}-${mod_version}"
+group = "info.ata4"
+archivesBaseName = "Minema Resurrection"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-    // The mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   Snapshot are built nightly.
-    // stable_#            Stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: '2022.03.13-1.18.2'
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    mappings channel: "${mappings_channel}", version: "${mappings_version}"
 
     accessTransformers.from(file('src/main/resources/META-INF/accesstransformer.cfg'))
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             workingDirectory file('run')
@@ -113,26 +153,47 @@ minecraft {
 }
 
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.18'
-
-
+    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
+
+//Set the various variables/settings for the different process resources tasks
+processResources {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
+    exclude('META-INF/mods.toml')
+    configure { finalizedBy(replaceResources) }
+    doLast {
+        fileTree(dir: getOutputs().getFiles().getAsPath(), includes: jsonPatterns).each {
+            File file -> file.setText(JsonOutput.toJson(new JsonSlurper().parse(file)))
+        }
+    }
+}
+
+//Make the various classes tasks depend on the corresponding replaceResources tasks in addition to the default processResources tasks they depend on
+classes.configure { dependsOn(replaceResources) }
 
 // Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    duplicatesStrategy(DuplicatesStrategy.FAIL)
     manifest {
         attributes([
-            "Specification-Title": "minema",
-            "Specification-Vendor": "Minema",
-            "Specification-Version": "1", // We are version 1 of ourselves
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"minema",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "Automatic-Module-Name": "minema"
+                "Specification-Title"     : "minema",
+                "Specification-Vendor"    : "Minema Resurrection",
+                "Specification-Version"   : "${project.mod_version}",
+                "Implementation-Title"    : project.name,
+                "Implementation-Version"  : "${project.mod_version}",
+                "Implementation-Vendor"   : "minema",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "Automatic-Module-Name"   : "minema"
         ])
     }
+    afterEvaluate { finalizedBy reobfJar }
 }
+
+reobf {
+    jar { classpath.from(sourceSets.main.compileClasspath) }
+}
+
+tasks.withType(JavaCompile).configureEach({
+    it.options.encoding = 'UTF-8'
+    it.options.compilerArgs << "-Xmaxerrs" << "100000"
+})
