@@ -139,7 +139,7 @@ public class VideoHandler extends CaptureModule {
 
     private float linearizeDepth(float z) {
         final float near = 0.05f;
-        final float far = Minecraft.getInstance().options.renderDistance << 4;
+        final float far = Minecraft.getInstance().options.renderDistance().get() << 4;
         return 0.1f / (far + near - (2 * z - 1) * (far - near));
     }
 

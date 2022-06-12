@@ -1,17 +1,17 @@
 package info.ata4.minecraft.minema;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import org.lwjgl.opengl.GL15;
 
 public class Utils {
 
     public static void print(final String msg, final ChatFormatting format) {
-        final TextComponent text = new TextComponent(msg == null ? "null" : msg);
+        final MutableComponent text = Component.literal(msg == null ? "null" : msg);
         text.getStyle().withColor(format);
-        Minecraft.getInstance().player.sendMessage(text, Util.NIL_UUID);
+        Minecraft.getInstance().player.sendSystemMessage(text);
     }
 
     public static void printError(Throwable throwable) {

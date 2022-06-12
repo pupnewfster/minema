@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
@@ -27,7 +28,10 @@ public class ImageFrameExporter extends FrameExporter {
     @Override
     protected void doExportFrame(ByteBuffer buffer) throws Exception {
         String fileName = String.format("%06d.tga", CaptureSession.singleton.getTime().getNumFrames());
-        Path path = CaptureSession.singleton.getCaptureDir().resolve(movieName).resolve(fileName);
+        Path folder = CaptureSession.singleton.getCaptureDir().resolve(movieName);
+        //Ensure all parents actually exist
+        Files.createDirectories(folder);
+        Path path = folder.resolve(fileName);
         writeImage(path, buffer, width, height);
     }
 
@@ -56,5 +60,4 @@ public class ImageFrameExporter extends FrameExporter {
             buffer.rewind();
         }
     }
-
 }

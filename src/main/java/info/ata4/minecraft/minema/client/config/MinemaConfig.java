@@ -64,7 +64,7 @@ public class MinemaConfig {
         useVideoEncoder = CachedBooleanValue.wrap(this, builder.define("useVideoEncoder", true));
         videoEncoderPath = CachedStringValue.wrap(this, builder.define("videoEncoderPath", "ffmpeg"));
         videoEncoderParams = CachedStringValue.wrap(this, builder.define("videoEncoderParams",
-              "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4"));
+              "-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf \"vflip%OPTIONAL_SCALE%\" -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4"));
         snapResolution = CachedEnumValue.wrap(this, builder.defineEnum("snapResolution", SnapResolution.MOD2));
         builder.pop();
 

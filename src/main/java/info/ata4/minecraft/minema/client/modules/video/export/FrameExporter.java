@@ -1,17 +1,17 @@
 package info.ata4.minecraft.minema.client.modules.video.export;
 
+import com.mojang.logging.LogUtils;
 import info.ata4.minecraft.minema.CaptureSession;
 import java.nio.ByteBuffer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 public abstract class FrameExporter {
 
-    protected static final Logger L = LogManager.getLogger();
+    protected static final Logger L = LogUtils.getLogger();
 
     protected String movieName;
     protected int width;

@@ -1,5 +1,6 @@
 package info.ata4.minecraft.minema;
 
+import com.mojang.logging.LogUtils;
 import info.ata4.minecraft.minema.client.config.ConfigHandler;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import java.nio.file.Path;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
+import org.slf4j.Logger;
 
 /**
  * Most of the files in this repo do have the old copyright notice about Barracuda even though I have touched most of it, in some cases substantially. Few classes do not
@@ -23,6 +25,7 @@ public class Minema {
 
     public static final String MODID = "minema";
     public static final Path CONFIG_DIR = FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(Minema.MODID), Minema.MODID);
+    public static final Logger logger = LogUtils.getLogger();
 
     public static Minema instance;
     private final MinemaConfig config;

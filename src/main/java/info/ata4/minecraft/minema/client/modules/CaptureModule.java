@@ -1,13 +1,13 @@
 package info.ata4.minecraft.minema.client.modules;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 public abstract class CaptureModule {
 
     protected static final Minecraft MC = Minecraft.getInstance();
-    protected static final Logger L = LogManager.getLogger();
+    protected static final Logger L = LogUtils.getLogger();
     private boolean enabled;
 
     public String getName() {
