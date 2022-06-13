@@ -51,6 +51,13 @@ public class PipeFrameExporter extends FrameExporter {
         Path path = CaptureSession.singleton.getCaptureDir();
 
         String params = cfg.videoEncoderParams.get();
+        if (width % 2 == 1 || height % 2 == 1) {
+            //If it doesn't scale properly specify scaling as part of the parameters
+            // Do this first so that we can then replace the width and height as part of that
+            params = params.replace("%OPTIONAL_SCALE%", ",scale=trunc(%WIDTH%/2)*2:trunc(%HEIGHT%/2)*2");
+        } else {
+            params = params.replace("%OPTIONAL_SCALE%", "");
+        }
         params = params.replace("%WIDTH%", String.valueOf(width));
         params = params.replace("%HEIGHT%", String.valueOf(height));
         params = params.replace("%FPS%", String.valueOf(cfg.frameRate.get()));

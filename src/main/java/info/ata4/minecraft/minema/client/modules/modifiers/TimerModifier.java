@@ -36,13 +36,13 @@ public class TimerModifier extends CaptureModule {
         }
 
         // get default ticks per second if possible
-        defaultTps = MC.timer.msPerTick;
+        defaultTps = 1_000 / MC.timer.msPerTick;
 
         float fps = (float) cfg.frameRate.get();
         float speed = (float) cfg.engineSpeed.get();
 
         // set fixed delay timer
-        timer = new FixedTimer(1000F / defaultTps, fps, speed);
+        timer = new FixedTimer(defaultTps, fps, speed);
         MC.timer = timer;
     }
 
@@ -61,6 +61,6 @@ public class TimerModifier extends CaptureModule {
 
         // restore default timer
         timer = null;
-        MC.timer = new Timer(1000F / defaultTps, 0);
+        MC.timer = new Timer(defaultTps, 0);
     }
 }
