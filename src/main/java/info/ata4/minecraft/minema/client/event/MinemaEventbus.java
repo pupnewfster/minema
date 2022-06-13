@@ -17,7 +17,7 @@ public class MinemaEventbus<X> {
     private final ArrayList<IEventListener<X>> listeners;
 
     private MinemaEventbus() {
-        this.listeners = new ArrayList<>();
+        this.listeners = new ArrayList<>(1);
     }
 
     /**

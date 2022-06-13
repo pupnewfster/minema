@@ -12,6 +12,7 @@ package info.ata4.minecraft.minema.client.config;
 import info.ata4.minecraft.minema.client.config.value.CachedBooleanValue;
 import info.ata4.minecraft.minema.client.config.value.CachedDoubleValue;
 import info.ata4.minecraft.minema.client.config.value.CachedEnumValue;
+import info.ata4.minecraft.minema.client.config.value.CachedFloatValue;
 import info.ata4.minecraft.minema.client.config.value.CachedIntValue;
 import info.ata4.minecraft.minema.client.config.value.CachedPrimitiveValue;
 import info.ata4.minecraft.minema.client.config.value.CachedResolvableConfigValue;
@@ -51,7 +52,7 @@ public class MinemaConfig {
     public final CachedBooleanValue recordGui;
     public final CachedBooleanValue aaFastRenderFix;
 
-    public final CachedDoubleValue engineSpeed;
+    public final CachedFloatValue engineSpeed;
     public final CachedBooleanValue syncEngine;
     public final CachedBooleanValue preloadChunks;
     public final CachedBooleanValue forcePreloadChunks;
@@ -81,7 +82,7 @@ public class MinemaConfig {
         builder.pop();
 
         builder.comment("Engine Settings").push(ENGINE_CATEGORY);
-        engineSpeed = CachedDoubleValue.wrap(this, builder.defineInRange("engineSpeed", 1.0, 0.01, 100.0));
+        engineSpeed = CachedFloatValue.wrap(this, builder.defineInRange("engineSpeed", 1.0, 0.01, 100.0));
         syncEngine = CachedBooleanValue.wrap(this, builder.define("syncEngine", true));
         preloadChunks = CachedBooleanValue.wrap(this, builder.define("preloadChunks", true));
         forcePreloadChunks = CachedBooleanValue.wrap(this, builder.define("forcePreloadChunks", false));

@@ -18,21 +18,21 @@ import net.minecraft.client.Timer;
  */
 public class FixedTimer extends Timer {
 
-    private final float ticksPerSecond;
+    private final float msPerTick;
     private final float framesPerSecond;
     private final float timerSpeed;
 
     public FixedTimer(float tps, float fps, float speed) {
         super(tps, 0);
-        ticksPerSecond = tps;
+        msPerTick = 1000.0F / tps;
         framesPerSecond = fps;
         timerSpeed = speed;
     }
 
     @Override
-    public int advanceTime(long someLastSyncNumber) {
+    public int advanceTime(long gameTime) {
         // TODO: What does lastSyncSysClock actually do and do I have to care? Was introduced in 1.13.2
-        tickDelta += timerSpeed * (ticksPerSecond / framesPerSecond);
+        tickDelta += timerSpeed * (msPerTick / framesPerSecond);
         int elapsedTicks = (int) tickDelta;
         tickDelta -= elapsedTicks;
         partialTick = tickDelta;
