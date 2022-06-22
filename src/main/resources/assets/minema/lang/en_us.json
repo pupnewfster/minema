@@ -1,66 +1,110 @@
 {
-  "minema.error.label": "Recording error:",
+  "minema_resurrection.config.encoding": "Encoding",
+  "minema_resurrection.config.encoding.tooltip": "Settings for video encoding.",
 
-  "key.categories.minema": "Minema  Resurrection",
-  "key.minema.capture": "Start/stop recording",
+  "minema_resurrection.config.capturing": "Capturing",
+  "minema_resurrection.config.capturing.tooltip": "Settings for video recording.",
 
-  "minema.config.encoding": "Encoding",
-  "minema.config.encoding.tooltip": "Settings for video encoding.",
+  "minema_resurrection.config.engine": "Engine Overrides",
+  "minema_resurrection.config.engine.tooltip": "Advanced engine override settings used during recording.",
 
-  "minema.config.capturing": "Capturing",
-  "minema.config.capturing.tooltip": "Settings for video recording.",
+  "minema_resurrection.config.useVideoEncoder": "Use Video Encoder",
+  "minema_resurrection.config.useVideoEncoder.tooltip": "If enabled, a video encoding program is used that will receive uncompressed BGR24 frames from Minema Resurrection via the standard input pipe.",
 
-  "minema.config.engine": "Engine Overrides",
-  "minema.config.engine.tooltip": "Advanced engine override settings used during recording.",
+  "minema_resurrection.config.videoEncoderPath": "Encoder Path",
+  "minema_resurrection.config.videoEncoderPath.tooltip": "Path to the video encoding executable. The encoder's working directory is the generated movie folder. Ignored if the video encoder is disabled.",
 
-  "minema.config.useVideoEncoder": "Use Video Encoder",
-  "minema.config.useVideoEncoder.tooltip": "If enabled, a video encoding program is used that will receive uncompressed BGR24 frames from Minema via the standard input pipe.",
+  "minema_resurrection.config.videoEncoderParams": "Encoder Arguments",
+  "minema_resurrection.config.videoEncoderParams.tooltip": "Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use. Ignored if the video encoder is disabled.",
 
-  "minema.config.videoEncoderPath": "Encoder Path",
-  "minema.config.videoEncoderPath.tooltip": "Path to the video encoding executable. The encoder's working directory is the generated movie folder. Ignored if the video encoder is disabled.",
+  "minema_resurrection.config.snapResolution": "Snap Resolution",
+  "minema_resurrection.config.snapResolution.tooltip": "If necessary, snaps the recording resolution to the next lower resolution so that width and height is divisible by this modulus. FFMpeg only needs mod2, some other encoders might need more.",
 
-  "minema.config.videoEncoderParams": "Encoder Arguments",
-  "minema.config.videoEncoderParams.tooltip": "Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use. Ignored if the video encoder is disabled.",
+  "minema_resurrection.config.frameWidth": "Frame Width",
+  "minema_resurrection.config.frameWidth.tooltip": "Width of every captured frame in pixels. Set to 0 to use the current window/display width. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
 
-  "minema.config.snapResolution": "Snap Resolution",
-  "minema.config.snapResolution.tooltip": "If necessary, snaps the recording resolution to the next lower resolution so that width and height is divisible by this modulus. FFMpeg only needs mod2, some other encoders might need more.",
+  "minema_resurrection.config.frameHeight": "Frame Height",
+  "minema_resurrection.config.frameHeight.tooltip": "Height of every captured frame in pixels. Set to 0 to use the current window/display height. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
 
-  "minema.config.frameWidth": "Frame Width",
-  "minema.config.frameWidth.tooltip": "Width of every captured frame in pixels. Set to 0 to use the current window/display width. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
+  "minema_resurrection.config.frameRate": "Frame Rate",
+  "minema_resurrection.config.frameRate.tooltip": "Recording frame rate, sets the amount of frames recorded per in-game second. Floating point values are allowed, e.g. 23.976 for 24p NTSC. Because Minecraft operates at 20 ticks per second, frame rates with multiples of 20 are recommended for best smoothness.",
 
-  "minema.config.frameHeight": "Frame Height",
-  "minema.config.frameHeight.tooltip": "Height of every captured frame in pixels. Set to 0 to use the current window/display height. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.",
+  "minema_resurrection.config.frameLimit": "Frame Limit",
+  "minema_resurrection.config.frameLimit.tooltip": "Number of frames to capture before stopping automatically. -1 means no limit.",
 
-  "minema.config.frameRate": "Frame Rate",
-  "minema.config.frameRate.tooltip": "Recording frame rate, sets the amount of frames recorded per in-game second. Floating point values are allowed, e.g. 23.976 for 24p NTSC. Because Minecraft operates at 20 ticks per second, frame rates with multiples of 20 are recommended for best smoothness.",
+  "minema_resurrection.config.capturePath": "Capture Path",
+  "minema_resurrection.config.capturePath.tooltip": "Path were the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.",
 
-  "minema.config.frameLimit": "Frame Limit",
-  "minema.config.frameLimit.tooltip": "Number of frames to capture before stopping automatically. -1 means no limit.",
+  "minema_resurrection.config.showOverlay": "Show Overlay",
+  "minema_resurrection.config.showOverlay.tooltip": "If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.",
 
-  "minema.config.capturePath": "Capture Path",
-  "minema.config.capturePath.tooltip": "Path were the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.",
+  "minema_resurrection.config.captureDepth": "Capture depth buffer",
+  "minema_resurrection.config.captureDepth.tooltip": "If enabled, the depth buffer is captured linearly. Warning: Certain tricks are not available for this buffer so this is quite slow!",
 
-  "minema.config.showOverlay": "Show Overlay",
-  "minema.config.showOverlay.tooltip": "If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.",
+  "minema_resurrection.config.recordGui": "Record GUI",
+  "minema_resurrection.config.recordGui.tooltip": "If disabled, the GUI (hotbar, hand, crosshair, etc) will not be recorded.",
 
-  "minema.config.captureDepth": "Capture depth buffer",
-  "minema.config.captureDepth.tooltip": "If enabled, the depth buffer is captured linearly. Warning: Certain tricks are not available for this buffer so this is quite slow!",
+  "minema_resurrection.config.aaFastRenderFix": "Antialiasing and fast render fix",
+  "minema_resurrection.config.aaFastRenderFix.tooltip": "Enable to fix broken recordings when using optifine's antialiasing or fast render together with a custom resolution. Resizes the whole application window as a workaround.",
 
-  "minema.config.recordGui": "Record GUI",
-  "minema.config.recordGui.tooltip": "If disabled, the GUI (hotbar, hand, crosshair, etc) will not be recorded.",
+  "minema_resurrection.config.engineSpeed": "Engine Speed",
+  "minema_resurrection.config.engineSpeed.tooltip": "Speed modifier for the game clock. The default is 1.0, which equals 20 ticks per second. Lower or higher values will speed up or slow down the game time. 2.5, for example, results in two and a half of the normal speed. Useful for slow motion or time lapse effects. Ignored if the capturing is unsynchronized.",
 
-  "minema.config.aaFastRenderFix": "Antialiasing and fast render fix",
-  "minema.config.aaFastRenderFix.tooltip": "Enable to fix broken recordings when using optifine's antialiasing or fast render together with a custom resolution. Resizes the whole application window as a workaround.",
+  "minema_resurrection.config.syncEngine": "Synchronize",
+  "minema_resurrection.config.syncEngine.tooltip": "If enabled, the local server and client runs synchronously to the video capturing frame rate. This effectively turns Minecraft into an offline renderer and allows rendering and capturing of extremely complex scenes. This ShaderSync version also synchronizes the shader mod by karyonix (compatible with Optifine, too). ONLY WORKS ON LOCAL WORLDS!",
 
-  "minema.config.engineSpeed": "Engine Speed",
-  "minema.config.engineSpeed.tooltip": "Speed modifier for the game clock. The default is 1.0, which equals 20 ticks per second. Lower or higher values will speed up or slow down the game time. 2.5, for example, results in two and a half of the normal speed. Useful for slow motion or time lapse effects. Ignored if the capturing is unsynchronized.",
+  "minema_resurrection.config.preloadChunks": "Preload Chunks",
+  "minema_resurrection.config.preloadChunks.tooltip": "If enabled, Minema Resurrection will heavily accelerate the chunk loading rate during recording. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!",
 
-  "minema.config.syncEngine": "Synchronize",
-  "minema.config.syncEngine.tooltip": "If enabled, the local server and client runs synchronously to the video capturing frame rate. This effectively turns Minecraft into an offline renderer and allows rendering and capturing of extremely complex scenes. This ShaderSync version also synchronizes the shader mod by karyonix (compatible with Optifine, too). ONLY WORKS ON LOCAL WORLDS!",
+  "minema_resurrection.config.forcePreloadChunks": "Force preload chunks",
+  "minema_resurrection.config.forcePreloadChunks.tooltip": "If Preload Chunks is enabled and this is also enabled, all chunks in render distance will be preloaded. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!",
 
-  "minema.config.preloadChunks": "Preload Chunks",
-  "minema.config.preloadChunks.tooltip": "If enabled, Minema will heavily accelerate the chunk loading rate during recording. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!",
+  "key.categories.minema_resurrection": "Minema  Resurrection",
+  "key.minema_resurrection.capture": "Start/stop recording",
+  "key.minema_resurrection.add_point": "Add path point",
+  "key.minema_resurrection.increase_fov": "Increase FOV",
+  "key.minema_resurrection.decrease_fov": "Decrease FOV",
+  "key.minema_resurrection.reset_fov": "Reset FOV",
+  "key.minema_resurrection.clockwise": "Roll clockwise",
+  "key.minema_resurrection.counter_clockwise": "Roll counterclockwise",
+  "key.minema_resurrection.reset": "Reset roll",
 
-  "minema.config.forcePreloadChunks": "Force preload chunks",
-  "minema.config.forcePreloadChunks.tooltip": "If Preload Chunks is enabled and this is also enabled, all chunks in render distance will be preloaded. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!"
+  "command.minema_resurrection.path.started": "Traveling started",
+  "command.minema_resurrection.path.stopped": "Traveling stopped",
+  "command.minema_resurrection.path.is_empty": "Path is empty",
+  "command.minema_resurrection.path.invalid_point": "Failed to read point from file",
+  "command.minema_resurrection.path.is_populated": "Clear the path first to confirm the overwrite",
+  "command.minema_resurrection.path.undo": "Last one removed",
+  "command.minema_resurrection.path.does_not_exist": "Point not defined",
+  "command.minema_resurrection.path.reset": "Removed all points",
+  "command.minema_resurrection.path.reset_beware_target": "Attention: You still have a target set!",
+  "command.minema_resurrection.path.replace": "Replaced point %s",
+  "command.minema_resurrection.path.add": "Added point %s",
+  "command.minema_resurrection.path.target.set": "Camera path will be focused to your current position",
+  "command.minema_resurrection.path.target.removed": "Removed camera focus",
+  "command.minema_resurrection.path.circle_created": "Circles have been created around your current position, consider setting a target",
+  "command.minema_resurrection.path.point.inserted": "Inserted before point %s",
+  "command.minema_resurrection.path.point.removed": "Removed point %s",
+
+  "command.minema_resurrection.travelled_to": "Traveled to point %s",
+  "command.minema_resurrection.at_least_two_points": "You have to set at least two points to start traveling",
+
+  "warn.minema_resurrection.no_local_world_teleport": "Teleporting is done over a presumably large distance without access to the server! Use Minema Resurrection on local worlds!",
+  "warn.minema_resurrection.error": "WARNING!",
+  "warn.minema_resurrection.warning": "Warning!",
+  "warn.minema_resurrection.tick_sync": "Tick sync is NOT going to work! Record in single player!",
+  "warn.minema_resurrection.preload_chunks": "Instant chunk loading should be used in single player for its full effect!",
+
+  "error.minema_resurrection.cause": "Cause: %s %s",
+  "error.minema_resurrection.see_log": "See log for full stacktrace",
+
+  "render.minema_resurrection.preview.on": "Preview has been enabled",
+  "render.minema_resurrection.preview.off": "Preview has been disabled",
+
+  "exporter.minema_resurrection.successful.write": "Successfully exported to %s",
+  "exporter.minema_resurrection.successful.read": "Successfully imported",
+  "exporter.minema_resurrection.io_error": "IO error: %s",
+  "exporter.minema_resurrection.position_cannot_be_parsed": "Position cannot be read: %s",
+  "exporter.minema_resurrection.file_does_not_exist": "File does not exist",
+  "exporter.minema_resurrection.file_already_exists": "File already exists. Delete it by hand or choose another name"
 }

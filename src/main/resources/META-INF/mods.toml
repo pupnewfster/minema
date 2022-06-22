@@ -1,23 +1,23 @@
 modLoader="javafml"
 loaderVersion="${loader_version}"
-issueTrackerURL="https://github.com/pupnewfster/minema/issues"
-license="The Unlicense"
+issueTrackerURL="https://github.com/pupnewfster/minema_resurrection/issues"
+license="MIT"
 
 [[mods]]
-    modId="minema"
+    modId="minema_resurrection"
     version="${version}"
     displayName="Minema Resurrection"
-    displayURL="https://github.com/pupnewfster/minema"
-    authors="Barracuda, Gregosteros"
-    credits="Aidancbrady, pupnewfster"
-    description='''This mod allows you to record fluid movies in Minecraft, even if the video recording itself is not.'''
+    displayURL="https://github.com/pupnewfster/minema_resurrection"
+    authors="Barracuda, Gregosteros, pupnewfster"
+    credits="Aidancbrady"
+    description='''Minema is a cinematic frametime-based camera pathing and video capturing tool. Create perfectly fluid video at a locked framerate and even oversampled video resolution with shaders and preloaded chunks. Minema includes shadersync to ensure the shader animations are locked to the captured framerate and includes options for engine time scaling.'''
     displayTest="IGNORE_ALL_VERSION"
-[[dependencies.minema]]
+[[dependencies.minema_resurrection]]
     modId="minecraft"
     mandatory=true
     versionRange="${mc_version}"
     side="BOTH"
-[[dependencies.minema]]
+[[dependencies.minema_resurrection]]
     modId="forge"
     mandatory=true
     versionRange="${forge_version}"

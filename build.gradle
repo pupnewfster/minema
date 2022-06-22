@@ -60,7 +60,7 @@ def replaceResources = tasks.register("replaceResources", Copy) {
 }
 
 version = "${minecraft_version}-${mod_version}"
-group = "info.ata4"
+group = "com.github.pupnewfster"
 archivesBaseName = "Minema Resurrection"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -159,14 +159,14 @@ jar {
     duplicatesStrategy(DuplicatesStrategy.FAIL)
     manifest {
         attributes([
-                "Specification-Title"     : "minema",
+                "Specification-Title"     : "minema_resurrection",
                 "Specification-Vendor"    : "Minema Resurrection",
                 "Specification-Version"   : "${project.mod_version}",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : "${project.mod_version}",
-                "Implementation-Vendor"   : "minema",
+                "Implementation-Vendor"   : "Minema Resurrection",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "Automatic-Module-Name"   : "minema"
+                "Automatic-Module-Name"   : "minema_resurrection"
         ])
     }
     afterEvaluate { finalizedBy reobfJar }
