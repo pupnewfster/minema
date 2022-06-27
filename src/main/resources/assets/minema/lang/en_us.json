@@ -15,7 +15,7 @@
   "minema_resurrection.config.videoEncoderPath.tooltip": "Path to the video encoding executable. The encoder's working directory is the generated movie folder. Ignored if the video encoder is disabled.",
 
   "minema_resurrection.config.videoEncoderParams": "Encoder Arguments",
-  "minema_resurrection.config.videoEncoderParams.tooltip": "Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use. Ignored if the video encoder is disabled.",
+  "minema_resurrection.config.videoEncoderParams.tooltip": "Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use, %OPTIONAL_SCALE% - adds a scale parameter if the dimensions aren't divisible by two. Ignored if the video encoder is disabled.",
 
   "minema_resurrection.config.snapResolution": "Snap Resolution",
   "minema_resurrection.config.snapResolution.tooltip": "If necessary, snaps the recording resolution to the next lower resolution so that width and height is divisible by this modulus. FFMpeg only needs mod2, some other encoders might need more.",
@@ -58,6 +58,9 @@
 
   "minema_resurrection.config.forcePreloadChunks": "Force preload chunks",
   "minema_resurrection.config.forcePreloadChunks.tooltip": "If Preload Chunks is enabled and this is also enabled, all chunks in render distance will be preloaded. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!",
+
+  "minema_resurrection.config.delayStartUntilChunksLoaded": "Delay start until all chunks loaded",
+  "minema_resurrection.config.delayStartUntilChunksLoaded.tooltip": "Delays starting the recording and travelling the path until all chunks in the client's view are loaded.",
 
   "key.categories.minema_resurrection": "Minema  Resurrection",
   "key.minema_resurrection.capture": "Start/stop recording",

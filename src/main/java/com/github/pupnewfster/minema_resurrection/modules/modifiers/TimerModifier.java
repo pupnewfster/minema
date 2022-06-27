@@ -46,7 +46,7 @@ public class TimerModifier extends CaptureModule {
 
     @Override
     protected boolean checkEnable() {
-        return MinemaResurrection.instance.getConfig().syncEngine.get() & minecraft.hasSingleplayerServer();
+        return MinemaResurrection.instance.getConfig().syncEngine.get() && minecraft.hasSingleplayerServer();
     }
 
     @Override

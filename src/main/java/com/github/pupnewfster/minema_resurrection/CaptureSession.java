@@ -40,6 +40,7 @@ public class CaptureSession {
     private CaptureTime time;
     private int frameLimit;
     private boolean isEnabled;
+    public boolean isPaused;
 
     private CaptureSession() {
     }
@@ -49,6 +50,7 @@ public class CaptureSession {
             return false;
         }
         isEnabled = true;
+        isPaused = false;
 
         try {
             MinemaConfig cfg = MinemaResurrection.instance.getConfig();
@@ -128,18 +130,21 @@ public class CaptureSession {
 
     @SubscribeEvent
     public void onRenderTick(RenderTickEvent e) {
-        if (e.phase == Phase.END) {
+        if (e.phase == Phase.END && !isPaused) {
             execFrameEvent(MinemaEventbus.endRenderBUS, new CaptureEvent.End(this));
         }
     }
 
     @SubscribeEvent
     public void onRenderLast(RenderLevelLastEvent event) {
-        execFrameEvent(MinemaEventbus.midRenderBUS, new CaptureEvent.Mid(this));
+        if (!isPaused) {
+            execFrameEvent(MinemaEventbus.midRenderBUS, new CaptureEvent.Mid(this));
+        }
     }
 
     @SubscribeEvent
     public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+        //TODO - 1.19: Once optifine is updated test if this handles the paused stuff properly
         ShaderSync.setFrameTimeCounter();
     }
 

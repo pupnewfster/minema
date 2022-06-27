@@ -1,7 +1,7 @@
 package com.github.pupnewfster.minema_resurrection.cam.path;
 
-import com.github.pupnewfster.minema_resurrection.util.CamUtils;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.Interpolator;
+import com.github.pupnewfster.minema_resurrection.util.CamUtils;
 import net.minecraft.world.entity.player.Player;
 
 public final class ActiveInterpolatorPath extends ActivePath {

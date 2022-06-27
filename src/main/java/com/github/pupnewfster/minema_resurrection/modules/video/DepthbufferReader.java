@@ -41,7 +41,7 @@ public class DepthbufferReader extends CommonReader {
         buffer.rewind();
 
         // first frame is empty in PBO mode, don't export it
-        if (isPBO & firstFrame) {
+        if (isPBO && firstFrame) {
             firstFrame = false;
             return false;
         }

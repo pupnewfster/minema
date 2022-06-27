@@ -2,6 +2,7 @@ package com.github.pupnewfster.minema_resurrection.modules;
 
 import com.github.pupnewfster.minema_resurrection.MinemaResurrection;
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.common.MinecraftForge;
 
 public abstract class CaptureModule {
 
@@ -66,4 +67,17 @@ public abstract class CaptureModule {
     protected abstract boolean checkEnable();
 
     protected abstract void doDisable() throws Exception;
+
+    public abstract static class EventBasedCaptureModule extends CaptureModule {
+
+        @Override
+        protected void doEnable() throws Exception {
+            MinecraftForge.EVENT_BUS.register(this);
+        }
+
+        @Override
+        protected void doDisable() throws Exception {
+            MinecraftForge.EVENT_BUS.unregister(this);
+        }
+    }
 }

@@ -11,11 +11,11 @@ package com.github.pupnewfster.minema_resurrection.modules;
 
 import com.github.pupnewfster.minema_resurrection.CaptureSession;
 import com.github.pupnewfster.minema_resurrection.MinemaResurrection;
+import com.github.pupnewfster.minema_resurrection.modules.CaptureModule.EventBasedCaptureModule;
 import com.github.pupnewfster.minema_resurrection.util.CaptureTime;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
@@ -23,7 +23,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class CaptureOverlay extends CaptureModule {
+public class CaptureOverlay extends EventBasedCaptureModule {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
@@ -42,16 +42,6 @@ public class CaptureOverlay extends CaptureModule {
 
         left.add("Time R: " + time.getRealTimeString());
         left.add("Time V: " + time.getVideoTimeString());
-    }
-
-    @Override
-    protected void doEnable() throws Exception {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    protected void doDisable() throws Exception {
-        MinecraftForge.EVENT_BUS.unregister(this);
     }
 
     @Override

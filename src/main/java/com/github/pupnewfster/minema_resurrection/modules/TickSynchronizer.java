@@ -10,6 +10,7 @@
 package com.github.pupnewfster.minema_resurrection.modules;
 
 import com.github.pupnewfster.minema_resurrection.MinemaResurrection;
+import com.github.pupnewfster.minema_resurrection.modules.CaptureModule.EventBasedCaptureModule;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -18,7 +19,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.LogicalSide;
  *
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
-public class TickSynchronizer extends CaptureModule {
+public class TickSynchronizer extends EventBasedCaptureModule {
 
     // wait time in nanoseconds before the lock release condition is re-checked
     private static final long WAIT_INTERVAL = TimeUnit.SECONDS.toNanos(1);
@@ -135,19 +135,14 @@ public class TickSynchronizer extends CaptureModule {
     }
 
     @Override
-    protected void doEnable() throws Exception {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
     protected boolean checkEnable() {
-        return MinemaResurrection.instance.getConfig().syncEngine.get() & minecraft.hasSingleplayerServer();
+        return MinemaResurrection.instance.getConfig().syncEngine.get() && minecraft.hasSingleplayerServer();
     }
 
     @Override
     protected void doDisable() throws Exception {
         clientReady.set(false);
         serverReady.set(false);
-        MinecraftForge.EVENT_BUS.unregister(this);
+        super.doDisable();
     }
 }

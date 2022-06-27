@@ -1,8 +1,8 @@
 package com.github.pupnewfster.minema_resurrection.util;
 
+import com.github.pupnewfster.minema_resurrection.EventListener;
 import com.github.pupnewfster.minema_resurrection.cam.CameraRoll;
 import com.github.pupnewfster.minema_resurrection.cam.DynamicFOV;
-import com.github.pupnewfster.minema_resurrection.EventListener;
 import com.github.pupnewfster.minema_resurrection.cam.path.PathHandler;
 import com.github.pupnewfster.minema_resurrection.cam.path.Position;
 import net.minecraft.ChatFormatting;
@@ -41,10 +41,11 @@ public class CamUtils {
         if (player == null) {
             PathHandler.stopTravelling();
         } else {
+            ServerPlayer serverPlayer = null;
             if (force) {
                 Minecraft minecraft = Minecraft.getInstance();
                 if (minecraft.hasSingleplayerServer()) {
-                    ServerPlayer serverPlayer = minecraft.getSingleplayerServer().getPlayerList().getPlayer(player.getUUID());
+                    serverPlayer = minecraft.getSingleplayerServer().getPlayerList().getPlayer(player.getUUID());
                     setPositionProperly(serverPlayer, pos);
                 } else {
                     player.sendSystemMessage(Translations.WARN_NO_LOCAL_WORLD_TELEPORT.translateColored(ChatFormatting.RED));
@@ -54,6 +55,9 @@ public class CamUtils {
             setPositionProperly(player, pos);
             CameraRoll.roll = pos.roll;
             DynamicFOV.set(pos.fov);
+            if (serverPlayer != null) {
+                serverPlayer.getLevel().getChunkSource().move(serverPlayer);
+            }
         }
     }
 

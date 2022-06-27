@@ -1,7 +1,7 @@
 package com.github.pupnewfster.minema_resurrection.cam.path;
 
 import com.github.pupnewfster.minema_resurrection.CaptureSession;
-import com.github.pupnewfster.minema_resurrection.util.CamUtils;
+import com.github.pupnewfster.minema_resurrection.MinemaResurrection;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.CubicInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IAdditionalAngleInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IPolarCoordinatesInterpolator;
@@ -9,9 +9,13 @@ import com.github.pupnewfster.minema_resurrection.cam.interpolation.IPositionInt
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.Interpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.LinearInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.TargetInterpolator;
+import com.github.pupnewfster.minema_resurrection.config.MinemaConfig;
+import com.github.pupnewfster.minema_resurrection.util.CamUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.IntConsumer;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.ViewArea;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
@@ -27,6 +31,8 @@ public class PathHandler {
     @Nullable
     private static ActivePath activePath = null;
     private static boolean recording;
+    //TODO - 1.19: Method to toggle this?
+    public static boolean isPaused;
     private static boolean preview = true;
 
     // Additional path properties
@@ -66,7 +72,11 @@ public class PathHandler {
 
         IAdditionalAngleInterpolator c = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
 
-        setActivePath(new ActiveInterpolatorPath(player, new Interpolator(pathCopy, a, b, c), iterations), record);
+        ActivePath path = new ActiveInterpolatorPath(player, new Interpolator(pathCopy, a, b, c), iterations);
+        if (MinemaResurrection.instance.getConfig().delayStartUntilChunksLoaded.get()) {
+            path = new DelayedPath(path);
+        }
+        setActivePath(path, record);
     }
 
     private static void setActivePath(ActivePath path, boolean record) {
@@ -80,6 +90,10 @@ public class PathHandler {
             //Start a recording if we are meant to record a given path
             recording = true;
             CaptureSession.singleton.startCapture();
+            if (path instanceof DelayedPath) {
+                //If we are delaying the path, pause actually recording the video
+                CaptureSession.singleton.isPaused = true;
+            }
         }
     }
 
@@ -96,7 +110,7 @@ public class PathHandler {
     // Auxiliary methods
 
     public static void tick() {
-        if (isTravelling()) {
+        if (isTravelling() && !isPaused) {
             activePath.tick();
         }
     }
@@ -175,4 +189,37 @@ public class PathHandler {
     }
 
     // End of waypoints
+
+    private static class DelayedPath extends ActivePath {
+
+        private final ActivePath internal;
+        private int timeToStart = -1;
+
+        public DelayedPath(ActivePath internal) {
+            this.internal = internal;
+        }
+
+        @Override
+        public void tick() {
+            if (timeToStart == 0) {
+                internal.tick();
+            } else if (timeToStart < 0) {
+                Minecraft minecraft = Minecraft.getInstance();
+                ViewArea frustum = minecraft.levelRenderer.viewArea;
+                if (frustum != null) {
+                    if (minecraft.levelRenderer.renderChunksInFrustum.stream().anyMatch(info -> !info.chunk.getCompiledChunk().hasNoRenderableLayers())) {
+                        MinemaConfig config = MinemaResurrection.instance.getConfig();
+                        //Wait 3 seconds after the first chunk with a single block in it is found
+                        timeToStart = 3 * (int) Math.ceil(config.engineSpeed.get() * config.frameRate.get());
+                    }
+                }
+            } else {
+                timeToStart--;
+                if (timeToStart == 0) {
+                    //Unpause it
+                    CaptureSession.singleton.isPaused = false;
+                }
+            }
+        }
+    }
 }
