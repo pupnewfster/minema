@@ -22,8 +22,8 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.Phase;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
@@ -136,14 +136,15 @@ public class CaptureSession {
     }
 
     @SubscribeEvent
-    public void onRenderLast(RenderLevelLastEvent event) {
-        if (!isPaused) {
+    public void onRenderLast(RenderLevelStageEvent event) {
+        //Render after weather as it is what renders latest
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && !isPaused) {
             execFrameEvent(MinemaEventbus.midRenderBUS, new CaptureEvent.Mid(this));
         }
     }
 
     @SubscribeEvent
-    public void onCameraSetup(EntityViewRenderEvent.CameraSetup event) {
+    public void onCameraSetup(ViewportEvent.ComputeCameraAngles event) {
         //TODO - 1.19: Once optifine is updated test if this handles the paused stuff properly
         ShaderSync.setFrameTimeCounter();
     }

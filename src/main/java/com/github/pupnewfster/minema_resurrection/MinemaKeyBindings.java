@@ -4,8 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import net.minecraft.Util;
 import net.minecraft.client.KeyMapping;
-import net.minecraftforge.client.ClientRegistry;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import org.lwjgl.glfw.GLFW;
 
 public class MinemaKeyBindings {
@@ -27,9 +26,9 @@ public class MinemaKeyBindings {
         return keyMapping;
     }
 
-    public static void clientSetup(FMLClientSetupEvent evt) {
+    public static void registerKeyMappings(RegisterKeyMappingsEvent evt) {
         for (KeyMapping key : keys) {
-            ClientRegistry.registerKeyBinding(key);
+            evt.register(key);
         }
     }
 }

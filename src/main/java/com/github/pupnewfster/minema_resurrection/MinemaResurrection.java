@@ -36,7 +36,7 @@ public class MinemaResurrection {
             FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(MODID), MODID);
             modContainer.addConfig(new ConfigHandler(modContainer, config = new MinemaConfig()));
             modEventBus.addListener(this::onConfigLoad);
-            modEventBus.addListener(MinemaKeyBindings::clientSetup);
+            modEventBus.addListener(MinemaKeyBindings::registerKeyMappings);
             MinecraftForge.EVENT_BUS.register(EventListener.instance);
         } else {
             config = null;

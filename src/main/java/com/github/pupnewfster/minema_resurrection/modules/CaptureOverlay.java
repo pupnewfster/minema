@@ -15,7 +15,7 @@ import com.github.pupnewfster.minema_resurrection.modules.CaptureModule.EventBas
 import com.github.pupnewfster.minema_resurrection.util.CaptureTime;
 import java.util.List;
 import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.CustomizeGuiOverlayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
@@ -26,7 +26,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class CaptureOverlay extends EventBasedCaptureModule {
 
     @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
+    public void onRenderGameOverlay(CustomizeGuiOverlayEvent.DebugText evt) {
         CaptureTime time = CaptureSession.singleton.getTime();
 
         List<String> left = evt.getLeft();

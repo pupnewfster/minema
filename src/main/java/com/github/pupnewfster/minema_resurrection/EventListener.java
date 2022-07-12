@@ -13,6 +13,7 @@ import com.github.pupnewfster.minema_resurrection.command.CommandMinema;
 import com.github.pupnewfster.minema_resurrection.util.CamUtils;
 import com.github.pupnewfster.minema_resurrection.util.Translations;
 import com.mojang.blaze3d.platform.InputConstants;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -23,13 +24,14 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.ShaderInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent.FieldOfView;
-import net.minecraftforge.client.event.InputEvent.KeyInputEvent;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
-import net.minecraftforge.client.event.RenderLevelLastEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
+import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -91,7 +93,7 @@ public final class EventListener implements IPathChangeListener {
     }
 
     @SubscribeEvent
-    public void onKeyInput(KeyInputEvent event) {
+    public void onKeyInput(InputEvent.Key event) {
         if (consumeClick(event, MinemaKeyBindings.KEY_CAPTURE)) {
             if (!CaptureSession.singleton.startCapture()) {
                 CaptureSession.singleton.stopCapture();
@@ -113,22 +115,23 @@ public final class EventListener implements IPathChangeListener {
         }
     }
 
-    private boolean consumeClick(KeyInputEvent event, KeyMapping keyBinding) {
+    private boolean consumeClick(InputEvent.Key event, KeyMapping keyBinding) {
         return keyBinding.consumeClick() || keyBinding.isDown() && event.getKey() == keyBinding.getKey().getValue() && event.getAction() == InputConstants.PRESS;
     }
 
     @SubscribeEvent
-    public void onRender(RenderLevelLastEvent event) {
-        if (this.previewPoints == null || !PathHandler.showPreview()) {
+    public void onRender(RenderLevelStageEvent event) {
+        if (event.getStage() != RenderLevelStageEvent.Stage.AFTER_PARTICLES || this.previewPoints == null || !PathHandler.showPreview()) {
             return;
         }
-        Camera camera = Minecraft.getInstance().gameRenderer.getMainCamera();
+        Camera camera = event.getCamera();
         Vec3 viewPosition = camera.getPosition();
         PoseStack poseStack = event.getPoseStack();
         poseStack.pushPose();
         poseStack.translate(-viewPosition.x, -viewPosition.y, -viewPosition.z);
         Matrix4f pose = poseStack.last().pose();
-
+        ShaderInstance previousShader = RenderSystem.getShader();
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         Tesselator tesselator = Tesselator.getInstance();
         BufferBuilder bufferBuilder = tesselator.getBuilder();
         bufferBuilder.begin(Mode.DEBUG_LINES, DefaultVertexFormat.POSITION_COLOR);
@@ -140,6 +143,8 @@ public final class EventListener implements IPathChangeListener {
         }
         tesselator.end();
         poseStack.popPose();
+        //Set shader back to the one it was
+        RenderSystem.setShader(() -> previousShader);
     }
 
     @SubscribeEvent
@@ -167,12 +172,12 @@ public final class EventListener implements IPathChangeListener {
     }
 
     @SubscribeEvent
-    public void fov(FieldOfView event) {
+    public void fov(ViewportEvent.ComputeFov event) {
         event.setFOV(DynamicFOV.get());
     }
 
     @SubscribeEvent
-    public void onOrientCamera(EntityViewRenderEvent.CameraSetup e) {
+    public void onOrientCamera(ViewportEvent.ComputeCameraAngles e) {
         // Do not explicitly set roll to 0 (when the player is hurt for example
         // minecraft uses roll)
         if (CameraRoll.roll != 0) {
