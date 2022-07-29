@@ -62,6 +62,11 @@
   "minema_resurrection.config.delayStartUntilChunksLoaded": "Delay start until all chunks loaded",
   "minema_resurrection.config.delayStartUntilChunksLoaded.tooltip": "Delays starting the recording and travelling the path until all chunks in the client's view are loaded.",
 
+  "minema_resurrection.config.applyFOVModifiers": "Apply FOV Modifiers",
+  "minema_resurrection.config.applyFOVModifiers.tooltip": "When Apply FOV Modifiers is disabled FOV modifiers will not be applied.",
+  "minema_resurrection.config.applyFOVModifiersPath": "Apply FOV Modifiers While Pathing",
+  "minema_resurrection.config.applyFOVModifiersPath.tooltip": "When Apply FOV Modifiers While Pathing is enabled FOV modifiers will be applied during pathing.",
+
   "key.categories.minema_resurrection": "Minema  Resurrection",
   "key.minema_resurrection.capture": "Start/stop recording",
   "key.minema_resurrection.add_point": "Add path point",

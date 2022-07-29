@@ -26,13 +26,15 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.material.FogType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.event.TickEvent.ClientTickEvent;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -148,7 +150,8 @@ public final class EventListener implements IPathChangeListener {
     }
 
     @SubscribeEvent
-    public void onTick(ClientTickEvent e) {
+    public void onRender(RenderTickEvent e) {
+        PathHandler.tick();
         if (PathHandler.isTravelling()) {
             return;
         }
@@ -167,13 +170,36 @@ public final class EventListener implements IPathChangeListener {
     }
 
     @SubscribeEvent
-    public void onRender(RenderTickEvent e) {
-        PathHandler.tick();
-    }
-
-    @SubscribeEvent
     public void fov(ViewportEvent.ComputeFov event) {
-        event.setFOV(DynamicFOV.get());
+        //Only adjust the Fov if the event used the fov setting from the options (when it is false
+        // it expects to be a static number such as for rendering the hand)
+        if (event.usedConfiguredFov()) {
+            float fov = DynamicFOV.get();
+            //Apply fov modifiers if enabled in config, and we aren't travelling a path, or we are meant to apply them even when travelling a path
+            if (MinemaResurrection.instance.getConfig().applyFOVModifiers.get() &&
+                (!PathHandler.isTravelling() || MinemaResurrection.instance.getConfig().applyFOVModifiersPath.get())) {
+                if (fov == DynamicFOV.getRaw()) {
+                    //Skip any changes if we are at the same value as vanilla would be
+                    return;
+                }
+                //Copy based off of GameRenderer#getFov
+                double partialTick = event.getPartialTick();
+                Minecraft minecraft = Minecraft.getInstance();
+                //Apply entity's Fov Modifier
+                fov *= (double) Mth.lerp(partialTick, minecraft.gameRenderer.oldFov, minecraft.gameRenderer.fov);
+                //Apply the Fov Modifier for if the entity is dead or if they are in a specific type of fluid
+                Camera camera = event.getCamera();
+                if (camera.getEntity() instanceof LivingEntity entity && entity.isDeadOrDying()) {
+                    float f = Math.min((float) entity.deathTime + (float) partialTick, 20.0F);
+                    fov /= (double) ((1.0F - 500.0F / (f + 500.0F)) * 2.0F + 1.0F);
+                }
+                FogType fogtype = camera.getFluidInCamera();
+                if (fogtype == FogType.LAVA || fogtype == FogType.WATER) {
+                    fov *= Mth.lerp(minecraft.options.fovEffectScale().get(), 1.0D, 0.85714287F);
+                }
+            }
+            event.setFOV(fov);
+        }
     }
 
     @SubscribeEvent

@@ -56,6 +56,8 @@ public class MinemaConfig {
     public final CachedBooleanValue preloadChunks;
     public final CachedBooleanValue forcePreloadChunks;
     public final CachedBooleanValue delayStartUntilChunksLoaded;
+    public final CachedBooleanValue applyFOVModifiers;
+    public final CachedBooleanValue applyFOVModifiersPath;
 
     public MinemaConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -124,6 +126,12 @@ public class MinemaConfig {
         delayStartUntilChunksLoaded = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.delayStartUntilChunksLoaded")
               .comment("Delays starting the recording and travelling the path until all chunks in the client's view are loaded.")
               .define("delayStartUntilChunksLoaded", true));
+        applyFOVModifiers = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.applyFOVModifiers")
+              .comment("When Apply FOV Modifiers is disabled FOV modifiers will not be applied.")
+              .define("applyFOVModifiers", false));
+        applyFOVModifiersPath = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.applyFOVModifiersPath")
+              .comment("When Apply FOV Modifiers While Pathing is enabled FOV modifiers will be applied during pathing.")
+              .define("applyFOVModifiersPath", false));
         builder.pop();
         configSpec = builder.build();
     }

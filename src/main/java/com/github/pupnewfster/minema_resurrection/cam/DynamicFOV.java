@@ -38,13 +38,13 @@ public class DynamicFOV {
 
     public static float get() {
         if (lastSyncedFOV != getRaw()) {
-            //Reset fov to the raw value as it was changed by the slider and we should update to the new value
+            //Reset fov to the raw value as it was changed by the slider, and we should update to the new value
             reset();
         }
         return fov;
     }
 
-    private static int getRaw() {
+    public static int getRaw() {
         return Minecraft.getInstance().options.fov().get();
     }
 }
