@@ -10,6 +10,8 @@ Ok, here it is!
 Description
 ======
 
+Minema Resurrection is a combined version of [Minema](https://github.com/ata4/minema) and [BaureCam](https://github.com/daipenger/BauerCam) for modern MC versions.
+
 As of version 2.0, Minema is a cinematic frametime-based video capture and camera pathing tool. Create perfectly fluid video at a locked framerate and even oversampled video resolution with shaders and preloaded chunks. Minema includes shadersync to ensure the shader animations are locked to the captured framerate and includes options for engine time scaling.
 
 Back in 2016, a camera mod was created to perfectly complement Minema. That mod was called BauerCam. BauerCam set out to work seamlessly alongside Minema and provide all the tools necessary for anyone with (almost) any GPU to capture smooth, cinematic video within Minecraft. Many camera mods have tried to take its place but there just wasn't anything like it. Now, BauerCam has been merged into Minema Resurrection to reunite these two mods as they were meant to be. Destined to create cinematic greatness, hand in hand, as one.
@@ -60,7 +62,7 @@ ffmpeg
 
 [FFMpeg MUST be installed if you want to record MP4 files.](https://www.ffmpeg.org/download.html#build-linux)
 
-Linux users should already be able to install FFMpeg using their favourite package manager. Otherwise you will find builds on the FFMpeg website*.
+Linux users should already be able to install FFMpeg using their favourite package manager. Otherwise you will find builds on the FFMpeg website.
 
 Windows users can get builds on the BtnB GitHub repo*. Unpack ffmpeg.exe (it is in bin/ in this archive) and move it to the root minecraft install folder. (where you would also find options.txt) You can also move it to somewhere else and change the encoder path (via config file) if you prefer it that way. Make sure to enable **'Use video encoder'**.
 
