@@ -1,6 +1,8 @@
 import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 
+import java.util.function.Consumer
+
 plugins {
     id 'java'
     id 'eclipse'
@@ -135,8 +137,33 @@ minecraft {
     }
 }
 
+void exclusiveRepo(RepositoryHandler handler, String url, String... groups) {
+    exclusiveRepo(handler, url, filter -> {
+        for (def group : groups) {
+            filter.includeGroup(group)
+        }
+    })
+}
+
+//Note: This cannot be static so that fg.repository can be properly accessed
+@SuppressWarnings('GrMethodMayBeStatic')
+void exclusiveRepo(RepositoryHandler handler, String url, Consumer<InclusiveRepositoryContentDescriptor> filterSetup) {
+    handler.exclusiveContent {
+        it.forRepositories(handler.maven {
+            setUrl(url)
+        }, fg.repository)//Add FG's repo so we make sure we are able to then find the mapped deps
+        it.filter { f -> filterSetup.accept(f) }
+    }
+}
+
+repositories { RepositoryHandler handler ->
+    exclusiveRepo(handler, 'https://www.cursemaven.com', 'curse.maven')
+}
+
 dependencies {
     minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
+
+    compileOnly fg.deobf("curse.maven:oculus-581495:${oculus_id}")
 }
 
 //Set the various variables/settings for the different process resources tasks

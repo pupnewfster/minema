@@ -14,7 +14,7 @@ public abstract class CaptureEvent {
     /**
      * Is posted when the render pipeline is right before clearing the depth buffer for rendering hand, GUI and other stuff
      * <p>
-     * See {@link RenderLevelStageEvent} and {@link RenderLevelStageEvent.Stage#AFTER_WEATHER} for details
+     * See {@link RenderLevelStageEvent} and {@link RenderLevelStageEvent.Stage#AFTER_LEVEL} for details
      */
     public static class Mid extends CaptureEvent {
 

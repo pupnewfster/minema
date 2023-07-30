@@ -137,8 +137,7 @@ public class CaptureSession {
 
     @SubscribeEvent
     public void onRenderLast(RenderLevelStageEvent event) {
-        //Render after weather as it is what renders latest
-        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_WEATHER && !isPaused) {
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL && !isPaused) {
             execFrameEvent(MinemaEventbus.midRenderBUS, new CaptureEvent.Mid(this));
         }
     }
