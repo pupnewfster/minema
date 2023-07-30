@@ -56,9 +56,9 @@ public class CaptureTime {
         long minutes = TimeUnit.NANOSECONDS.toMinutes(nanos) - TimeUnit.HOURS.toMinutes(hours);
         long seconds = TimeUnit.NANOSECONDS.toSeconds(nanos) - TimeUnit.MINUTES.toSeconds(minutes)
                        - TimeUnit.HOURS.toSeconds(hours);
-        long milis = TimeUnit.NANOSECONDS.toMillis(nanos) - TimeUnit.SECONDS.toMillis(seconds)
+        long millis = TimeUnit.NANOSECONDS.toMillis(nanos) - TimeUnit.SECONDS.toMillis(seconds)
                      - TimeUnit.MINUTES.toMillis(minutes) - TimeUnit.HOURS.toMillis(hours);
-        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milis);
+        return String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis);
     }
 
     private final long startTime;

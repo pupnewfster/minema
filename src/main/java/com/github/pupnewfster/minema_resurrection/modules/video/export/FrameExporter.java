@@ -51,7 +51,7 @@ public abstract class FrameExporter {
         }
     }
 
-    public final void exportFrame(ByteBuffer buffer) throws Exception {
+    public final void exportFrame(ByteBuffer buffer) {
         // export frame in the background so that the next frame can be
         // rendered in the meantime
         exportFuture = exportService.submit(() -> {

@@ -71,7 +71,7 @@ public class PipeFrameExporter extends FrameExporter {
         ProcessBuilder pb = new ProcessBuilder(cmds);
         pb.directory(path.toFile());
         pb.redirectErrorStream(true);
-        pb.redirectOutput(path.resolve(movieName.concat(".log")).toFile());
+        pb.redirectOutput(path.resolve(movieName + ".log").toFile());
         proc = pb.start();
 
         // Java wraps the process output stream into a BufferedOutputStream,

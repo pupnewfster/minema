@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.Locale;
 import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.GL;
@@ -40,7 +40,7 @@ public class VideoHandler extends CaptureModule {
         int frameWidth = MinemaResurrection.instance.getConfig().getFrameWidth();
         int frameHeight = MinemaResurrection.instance.getConfig().getFrameHeight();
 
-        String colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss", Locale.ROOT).format(new Date());
+        String colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss", Locale.ROOT).format(Calendar.getInstance().getTime());
         String depthName = colorName + "depthBuffer";
         this.recordGui = cfg.recordGui.get();
 

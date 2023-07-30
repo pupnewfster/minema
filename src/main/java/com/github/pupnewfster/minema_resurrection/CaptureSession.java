@@ -158,7 +158,7 @@ public class CaptureSession {
             if (cause != null) {
                 player.sendSystemMessage(Translations.ERROR_CAUSE.translateColored(ChatFormatting.RED, cause.getClass().getName(), cause.getMessage()));
             }
-            throwable.printStackTrace();
+            MinemaResurrection.logger.error(throwable.getMessage(), throwable);
             player.sendSystemMessage(Translations.ERROR_SEE_LOG.translateColored(ChatFormatting.RED));
         }
         if (stop) {

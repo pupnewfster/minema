@@ -62,7 +62,7 @@ public class CamUtils {
     }
 
     private static void setPositionProperly(Entity entity, Position pos) {
-        // This procedure here is crucial! When not done properly (eg.
+        // This procedure here is crucial! When not done properly (e.g.
         // setPositionAndRotation is not properly) it can lead to
         // spinning camera movement (probably yaw angle which may incorrectly be
         // bounded inside -180 and 180 degrees)

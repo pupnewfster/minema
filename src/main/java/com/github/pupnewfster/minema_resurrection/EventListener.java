@@ -62,23 +62,7 @@ public final class EventListener implements IPathChangeListener {
             Position[] path = PathHandler.getWaypoints();
             Interpolator interpolater = new Interpolator(path, CubicInterpolator.instance, IPolarCoordinatesInterpolator.dummy, IAdditionalAngleInterpolator.dummy);
 
-            double distances = 0;
-
-            Position prev = path[0];
-
-            // The use of direct distances instead of the actual interpolated
-            // slope means that there will always be less drawn lines per block,
-            // however this is a good enough approximation
-
-            for (int i = 1; i < path.length; i++) {
-                Position next = path[i];
-                distances += prev.distanceTo(next);
-                prev = next;
-            }
-
-            int iterations = (int) (distances * previewFineness + 0.5);
-            // Snap to next mod 2
-            iterations += iterations & 1;
+            int iterations = getIterations(path);
 
             this.previewPoints = new Position[iterations];
             for (int i = 0; i < iterations; i++) {
@@ -87,6 +71,25 @@ public final class EventListener implements IPathChangeListener {
         } else {
             this.previewPoints = null;
         }
+    }
+
+    private static int getIterations(Position[] path) {
+        double distances = 0;
+        Position prev = path[0];
+
+        // The use of direct distances instead of the actual interpolated
+        // slope means that there will always be less drawn lines per block,
+        // however this is a good enough approximation
+        for (int i = 1; i < path.length; i++) {
+            Position next = path[i];
+            distances += prev.distanceTo(next);
+            prev = next;
+        }
+
+        int iterations = (int) (distances * previewFineness + 0.5);
+        // Snap to next mod 2
+        iterations += iterations & 1;
+        return iterations;
     }
 
     @SubscribeEvent
@@ -182,23 +185,26 @@ public final class EventListener implements IPathChangeListener {
                     //Skip any changes if we are at the same value as vanilla would be
                     return;
                 }
+                double fovD = fov;
                 //Copy based off of GameRenderer#getFov
                 double partialTick = event.getPartialTick();
                 Minecraft minecraft = Minecraft.getInstance();
                 //Apply entity's Fov Modifier
-                fov *= (double) Mth.lerp(partialTick, minecraft.gameRenderer.oldFov, minecraft.gameRenderer.fov);
+                fovD *= Mth.lerp(partialTick, minecraft.gameRenderer.oldFov, minecraft.gameRenderer.fov);
                 //Apply the Fov Modifier for if the entity is dead or if they are in a specific type of fluid
                 Camera camera = event.getCamera();
                 if (camera.getEntity() instanceof LivingEntity entity && entity.isDeadOrDying()) {
                     float f = Math.min((float) entity.deathTime + (float) partialTick, 20.0F);
-                    fov /= (double) ((1.0F - 500.0F / (f + 500.0F)) * 2.0F + 1.0F);
+                    fovD /= ((1.0F - 500.0F / (f + 500.0F)) * 2.0F + 1.0F);
                 }
                 FogType fogtype = camera.getFluidInCamera();
                 if (fogtype == FogType.LAVA || fogtype == FogType.WATER) {
-                    fov *= Mth.lerp(minecraft.options.fovEffectScale().get(), 1.0D, 0.85714287F);
+                    fovD *= Mth.lerp(minecraft.options.fovEffectScale().get(), 1.0D, 0.85714287F);
                 }
+                event.setFOV(fovD);
+            } else {
+                event.setFOV(fov);
             }
-            event.setFOV(fov);
         }
     }
 

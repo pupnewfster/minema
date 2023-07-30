@@ -22,7 +22,7 @@ public class GameSettingsModifier extends CaptureModule {
     private boolean pauseOnLostFocus;
 
     @Override
-    protected void doEnable() throws Exception {
+    protected void doEnable() {
         Options gs = minecraft.options;
 
         // disable build-in framerate limit
@@ -39,7 +39,7 @@ public class GameSettingsModifier extends CaptureModule {
     }
 
     @Override
-    protected void doDisable() throws Exception {
+    protected void doDisable() {
         // restore everything
         Options gs = minecraft.options;
         gs.framerateLimit().set(framerateLimit);
