@@ -17,6 +17,7 @@ import com.github.pupnewfster.minema_resurrection.config.value.CachedIntValue;
 import com.github.pupnewfster.minema_resurrection.config.value.CachedPrimitiveValue;
 import com.github.pupnewfster.minema_resurrection.config.value.CachedResolvableConfigValue;
 import com.github.pupnewfster.minema_resurrection.config.value.CachedStringValue;
+import com.mojang.blaze3d.systems.RenderSystem;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.client.Minecraft;
@@ -25,7 +26,6 @@ import net.minecraftforge.fml.config.ModConfig.Type;
 
 public class MinemaConfig {
 
-    private static final int MAX_TEXTURE_SIZE = 1000;//Minecraft.getGLMaximumTextureSize();
     private static final Minecraft minecraft = Minecraft.getInstance();
     private static final String ENCODING_CATEGORY = "encoding";
     private static final String CAPTURING_CATEGORY = "capturing";
@@ -81,20 +81,21 @@ public class MinemaConfig {
         builder.pop();
 
         builder.comment("Capturing Settings").translation("minema_resurrection.config.capturing").push(CAPTURING_CATEGORY);
+        int maxTextureSize = RenderSystem.maxSupportedTextureSize();
         frameWidth = CachedIntValue.wrap(this, builder.translation("minema_resurrection.config.frameWidth")
               .comment("Width of every captured frame in pixels. Set to 0 to use the current window/display width. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.")
-              .defineInRange("frameWidth", 0, 0, MAX_TEXTURE_SIZE));
+              .defineInRange("frameWidth", 0, 0, maxTextureSize));
         frameHeight = CachedIntValue.wrap(this, builder.translation("minema_resurrection.config.frameHeight")
               .comment("Height of every captured frame in pixels. Set to 0 to use the current window/display height. Non-zero values require framebuffer support and are bound to the maximum texture resolution of your GPU.")
-              .defineInRange("frameHeight", 0, 0, MAX_TEXTURE_SIZE));
+              .defineInRange("frameHeight", 0, 0, maxTextureSize));
         frameRate = CachedDoubleValue.wrap(this, builder.translation("minema_resurrection.config.frameRate")
               .comment("Recording frame rate, sets the amount of frames recorded per in-game second. Floating point values are allowed, e.g. 23.976 for 24p NTSC. Because Minecraft operates at 20 ticks per second, frame rates with multiples of 20 are recommended for best smoothness.")
-              .defineInRange("frameRate", 60.0, 1.0, 240.0));
+              .defineInRange("frameRate", 60.0, 1.0, 960.0));
         frameLimit = CachedIntValue.wrap(this, builder.translation("minema_resurrection.config.frameLimit")
               .comment("Number of frames to capture before stopping automatically. -1 means no limit.")
               .defineInRange("frameLimit", -1, -1, Integer.MAX_VALUE));
         capturePath = CachedStringValue.wrap(this, builder.translation("minema_resurrection.config.capturePath")
-              .comment("Path were the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.")
+              .comment("Path where the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.")
               .define("capturePath", "movies"));
         showOverlay = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.showOverlay")
               .comment("If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.")

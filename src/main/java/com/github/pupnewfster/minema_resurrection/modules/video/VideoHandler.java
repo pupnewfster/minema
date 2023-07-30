@@ -37,6 +37,9 @@ public class VideoHandler extends CaptureModule {
 
         this.startWidth = minecraft.getWindow().getWidth();
         this.startHeight = minecraft.getWindow().getHeight();
+        int frameWidth = MinemaResurrection.instance.getConfig().getFrameWidth();
+        int frameHeight = MinemaResurrection.instance.getConfig().getFrameHeight();
+
         String colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss", Locale.ROOT).format(new Date());
         String depthName = colorName + "depthBuffer";
         this.recordGui = cfg.recordGui.get();
@@ -45,13 +48,13 @@ public class VideoHandler extends CaptureModule {
         boolean usePipe = cfg.useVideoEncoder.get();
         boolean recordDepth = cfg.captureDepth.get();
 
-        colorReader = new ColorbufferReader(startWidth, startHeight, usePBO);
+        colorReader = new ColorbufferReader(frameWidth, frameHeight, usePBO);
         colorExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
 
         if (recordDepth) {
-            depthReader = new DepthbufferReader(startWidth, startHeight, usePBO);
+            depthReader = new DepthbufferReader(frameWidth, frameHeight, usePBO);
             depthExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
-            depthRemapping = ByteBuffer.allocateDirect(startWidth * startHeight * 3);
+            depthRemapping = ByteBuffer.allocateDirect(frameWidth * frameHeight * 3);
             depthRemapping.rewind();
         }
 
@@ -69,9 +72,9 @@ public class VideoHandler extends CaptureModule {
             }
         }
 
-        colorExport.enable(colorName, startWidth, startHeight);
+        colorExport.enable(colorName, frameWidth, frameHeight);
 		if (depthExport != null) {
-			depthExport.enable(depthName, startWidth, startHeight);
+			depthExport.enable(depthName, frameWidth, frameHeight);
 		}
 
         MinemaEventbus.midRenderBUS.registerListener(this::onRenderMid);
