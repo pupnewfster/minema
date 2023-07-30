@@ -33,7 +33,7 @@
   "minema_resurrection.config.frameLimit.tooltip": "Number of frames to capture before stopping automatically. -1 means no limit.",
 
   "minema_resurrection.config.capturePath": "Capture Path",
-  "minema_resurrection.config.capturePath.tooltip": "Path were the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.",
+  "minema_resurrection.config.capturePath.tooltip": "Path where the captured videos are stored. If no absolute path is used, it's relative to the Minecraft working directory.",
 
   "minema_resurrection.config.showOverlay": "Show Overlay",
   "minema_resurrection.config.showOverlay.tooltip": "If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.",

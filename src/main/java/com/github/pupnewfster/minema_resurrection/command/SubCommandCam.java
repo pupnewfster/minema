@@ -69,7 +69,7 @@ public class SubCommandCam {
                         CommandSourceStack source = ctx.getSource();
                         int index = IntegerArgumentType.getInteger(ctx, pointArgName);
                         if (test.test(source, index - 1)) {
-                            source.sendSuccess(successMessage.translate(index), true);
+                            source.sendSuccess(() -> successMessage.translate(index), true);
                             return index;
                         }
                         throw PATH_DOES_NOT_EXIST.create();
@@ -82,9 +82,9 @@ public class SubCommandCam {
               .executes(ctx -> {
                   CommandSourceStack source = ctx.getSource();
                   int waypointsCleared = PathHandler.clearWaypoints();
-                  source.sendSuccess(Translations.COMMAND_PATH_RESET.translate(), true);
+                  source.sendSuccess(Translations.COMMAND_PATH_RESET::translate, true);
                   if (PathHandler.hasTarget()) {
-                      source.sendSuccess(Translations.COMMAND_PATH_RESET_BEWARE_TARGET.translate(), true);
+                      source.sendSuccess(Translations.COMMAND_PATH_RESET_BEWARE_TARGET::translate, true);
                   }
                   return waypointsCleared;
               });
@@ -95,10 +95,10 @@ public class SubCommandCam {
               .executes(ctx -> {
                   PathHandler.switchPreview();
                   if (PathHandler.showPreview()) {
-                      ctx.getSource().sendSuccess(Translations.RENDER_PREVIEW_ON.translate(), true);
+                      ctx.getSource().sendSuccess(Translations.RENDER_PREVIEW_ON::translate, true);
                       return 1;
                   }
-                  ctx.getSource().sendSuccess(Translations.RENDER_PREVIEW_OFF.translate(), true);
+                  ctx.getSource().sendSuccess(Translations.RENDER_PREVIEW_OFF::translate, true);
                   return 0;
               });
     }
@@ -107,7 +107,7 @@ public class SubCommandCam {
         return Commands.literal("stop")
               .executes(ctx -> {
                   PathHandler.stopTravelling();
-                  ctx.getSource().sendSuccess(Translations.COMMAND_PATH_STOPPED.translate(), true);
+                  ctx.getSource().sendSuccess(Translations.COMMAND_PATH_STOPPED::translate, true);
                   return 0;
               });
     }
@@ -117,14 +117,14 @@ public class SubCommandCam {
               .then(Commands.literal("off")
                     .executes(ctx -> {
                         PathHandler.removeTarget();
-                        ctx.getSource().sendSuccess(Translations.COMMAND_PATH_REMOVED_TARGET.translate(), true);
+                        ctx.getSource().sendSuccess(Translations.COMMAND_PATH_REMOVED_TARGET::translate, true);
                         return 0;
                     })
               ).then(Commands.literal("set")
                     .executes(ctx -> {
                         CommandSourceStack source = ctx.getSource();
                         PathHandler.setTarget(CommandMinema.getPlayerOrException(source).position());
-                        source.sendSuccess(Translations.COMMAND_PATH_SET_TARGET.translate(), true);
+                        source.sendSuccess(Translations.COMMAND_PATH_SET_TARGET::translate, true);
                         return 0;
                     })
               );
@@ -134,7 +134,7 @@ public class SubCommandCam {
         return Commands.literal("undo")
               .executes(ctx -> {
                   if (PathHandler.removeLastWaypoint()) {
-                      ctx.getSource().sendSuccess(Translations.COMMAND_PATH_UNDO.translate(), true);
+                      ctx.getSource().sendSuccess(Translations.COMMAND_PATH_UNDO::translate, true);
                       return PathHandler.getWaypointSize();
                   }
                   throw PATH_IS_EMPTY.create();

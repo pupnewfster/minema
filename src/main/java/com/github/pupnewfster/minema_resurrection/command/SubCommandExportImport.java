@@ -49,7 +49,7 @@ public class SubCommandExportImport {
                                 points.add(point);
                             }
                             PathHandler.setWaypoints(points);
-                            source.sendSuccess(Translations.EXPORTER_SUCCESSFUL_READ.translate(), true);
+                            source.sendSuccess(Translations.EXPORTER_SUCCESSFUL_READ::translate, true);
                         } catch (IOException e) {
                             source.sendFailure(Translations.EXPORTER_IO_ERROR.translate(e.getMessage()));
                         }
@@ -76,7 +76,7 @@ public class SubCommandExportImport {
                                 writer.write(point.toString());
                                 writer.newLine();
                             }
-                            ctx.getSource().sendSuccess(Translations.EXPORTER_SUCCESSFUL_WRITE.translate(file.getAbsolutePath()), true);
+                            ctx.getSource().sendSuccess(() -> Translations.EXPORTER_SUCCESSFUL_WRITE.translate(file.getAbsolutePath()), true);
                         } catch (IOException e) {
                             ctx.getSource().sendFailure(Translations.EXPORTER_IO_ERROR.translate(e.getMessage()));
                         }

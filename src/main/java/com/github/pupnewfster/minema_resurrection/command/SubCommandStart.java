@@ -32,7 +32,7 @@ public class SubCommandStart {
         long frames = LongArgumentType.getLong(ctx, "frames");
         CommandSourceStack source = ctx.getSource();
         PathHandler.startTravelling(CommandMinema.getPlayerOrException(source), frames, record);
-        source.sendSuccess(Translations.COMMAND_PATH_STARTED.translate(), true);
+        source.sendSuccess(Translations.COMMAND_PATH_STARTED::translate, true);
         return 0;
     }
 }

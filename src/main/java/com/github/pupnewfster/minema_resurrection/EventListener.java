@@ -19,7 +19,6 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat.Mode;
-import com.mojang.math.Matrix4f;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Camera;
 import net.minecraft.client.KeyMapping;
@@ -37,6 +36,7 @@ import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent.RenderTickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import org.joml.Matrix4f;
 
 public final class EventListener implements IPathChangeListener {
 

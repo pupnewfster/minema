@@ -24,7 +24,7 @@ public class MinemaResurrection {
 
     public static final String MODID = "minema_resurrection";
     public static final Logger logger = LogUtils.getLogger();
-    private static final Lazy<Path> cameraDirectory = Lazy.of(() -> FMLPaths.getOrCreateGameRelativePath(FMLPaths.GAMEDIR.get().resolve(MODID), MODID));
+    private static final Lazy<Path> cameraDirectory = Lazy.of(() -> FMLPaths.getOrCreateGameRelativePath(FMLPaths.GAMEDIR.get().resolve(MODID)));
     public static MinemaResurrection instance;
     private final MinemaConfig config;
 
@@ -33,7 +33,7 @@ public class MinemaResurrection {
             instance = this;
             ModContainer modContainer = ModLoadingContext.get().getActiveContainer();
             IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-            FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(MODID), MODID);
+            FMLPaths.getOrCreateGameRelativePath(FMLPaths.CONFIGDIR.get().resolve(MODID));
             modContainer.addConfig(new ConfigHandler(modContainer, config = new MinemaConfig()));
             modEventBus.addListener(this::onConfigLoad);
             modEventBus.addListener(MinemaKeyBindings::registerKeyMappings);

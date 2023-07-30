@@ -2,7 +2,7 @@ package com.github.pupnewfster.minema_resurrection.cam.interpolation;
 
 import com.github.pupnewfster.minema_resurrection.cam.path.PolarCoordinates;
 import com.github.pupnewfster.minema_resurrection.cam.path.Position;
-import net.minecraft.util.Mth;
+import net.minecraft.world.phys.Vec3;
 
 public final class CubicInterpolator implements IPositionInterpolator, IPolarCoordinatesInterpolator, IAdditionalAngleInterpolator {
 
@@ -13,7 +13,7 @@ public final class CubicInterpolator implements IPositionInterpolator, IPolarCoo
 
     @Override
     public void interpolatePosition(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
-        builder.setPosition(Mth.catmullRomSplinePos(y0, y1, y2, y3, step));
+        builder.setPosition(catmullRomSplinePos(y0, y1, y2, y3, step));
     }
 
     @Override
@@ -38,5 +38,18 @@ public final class CubicInterpolator implements IPositionInterpolator, IPolarCoo
         float b = y0 - y1 - a;
         float c = y2 - y0;
         return ((a * delta + b) * delta + c) * delta + y1;
+    }
+
+    //From vanilla's Mth class in version 1.19.2
+    private static Vec3 catmullRomSplinePos(Vec3 y0, Vec3 y1, Vec3 y2, Vec3 y3, double step) {
+        double d0 = ((-step + 2.0D) * step - 1.0D) * step * 0.5D;
+        double d1 = ((3.0D * step - 5.0D) * step * step + 2.0D) * 0.5D;
+        double d2 = ((-3.0D * step + 4.0D) * step + 1.0D) * step * 0.5D;
+        double d3 = (step - 1.0D) * step * step * 0.5D;
+        return new Vec3(
+              y0.x * d0 + y1.x * d1 + y2.x * d2 + y3.x * d3,
+              y0.y * d0 + y1.y * d1 + y2.y * d2 + y3.y * d3,
+              y0.z * d0 + y1.z * d1 + y2.z * d2 + y3.z * d3
+        );
     }
 }

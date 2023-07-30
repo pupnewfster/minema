@@ -58,7 +58,7 @@ public class SubCommandCircle {
         }
         PathHandler.addWaypoint(new Position(playerPos.x + rootPoint.x * radius, playerPos.y, playerPos.z + rootPoint.z * radius, playerPos.pitch, playerPos.yaw,
               playerPos.roll, playerPos.fov));
-        source.sendSuccess(Translations.COMMAND_PATH_CIRCLE_CREATED.translate(), true);
+        source.sendSuccess(Translations.COMMAND_PATH_CIRCLE_CREATED::translate, true);
         return circles;
     }
 }

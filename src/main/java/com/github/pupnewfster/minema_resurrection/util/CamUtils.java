@@ -56,7 +56,7 @@ public class CamUtils {
             CameraRoll.roll = pos.roll;
             DynamicFOV.set(pos.fov);
             if (serverPlayer != null) {
-                serverPlayer.getLevel().getChunkSource().move(serverPlayer);
+                serverPlayer.serverLevel().getChunkSource().move(serverPlayer);
             }
         }
     }

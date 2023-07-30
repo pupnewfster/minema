@@ -5,13 +5,13 @@ plugins {
     id 'java'
     id 'eclipse'
     id 'idea'
-    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'net.neoforged.gradle' version '[6.0.18,6.2)'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
 tasks.named('wrapper', Wrapper).configure {
     //Define wrapper values here so as to not have to always do so when updating gradlew.properties
-    gradleVersion = '7.5'
+    gradleVersion = '8.2.1'
     distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -77,8 +77,6 @@ minecraft {
     runs {
         client {
             workingDirectory file('run')
-            //We aren't a multi-project config so we can disable the forced exit to allow gradle run tasks to stop gracefully
-            forceExit = false
             //This fixes Mixin application problems from other mods because their refMaps are SRG-based, but we're in a MCP env
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -118,8 +116,6 @@ minecraft {
 
         server {
             workingDirectory file('run')
-            //We aren't a multi-project config so we can disable the forced exit to allow gradle run tasks to stop gracefully
-            forceExit = false
             //This fixes Mixin application problems from other mods because their refMaps are SRG-based, but we're in a MCP env
             property 'mixin.env.remapRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
@@ -140,7 +136,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+    minecraft "net.neoforged:forge:${minecraft_version}-${forge_version}"
 }
 
 //Set the various variables/settings for the different process resources tasks
@@ -177,7 +173,7 @@ jar {
 }
 
 reobf {
-    jar { classpath.from(sourceSets.main.compileClasspath) }
+    jar { libraries.from(sourceSets.main.compileClasspath) }
 }
 
 tasks.withType(JavaCompile).configureEach({
