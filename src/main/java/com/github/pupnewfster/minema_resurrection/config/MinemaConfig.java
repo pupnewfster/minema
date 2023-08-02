@@ -58,6 +58,7 @@ public class MinemaConfig {
     public final CachedBooleanValue delayStartUntilChunksLoaded;
     public final CachedBooleanValue applyFOVModifiers;
     public final CachedBooleanValue applyFOVModifiersPath;
+    public final CachedBooleanValue applyPathDayTime;
 
     public MinemaConfig() {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -133,6 +134,9 @@ public class MinemaConfig {
         applyFOVModifiersPath = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.applyFOVModifiersPath")
               .comment("When Apply FOV Modifiers While Pathing is enabled FOV modifiers will be applied during pathing.")
               .define("applyFOVModifiersPath", false));
+        applyPathDayTime = CachedBooleanValue.wrap(this, builder.translation("minema_resurrection.config.applyPathDayTime")
+              .comment("Applies and interpolates the current day time based on the time the points on the path were created.")
+              .define("applyPathDayTime", false));
         builder.pop();
         configSpec = builder.build();
     }

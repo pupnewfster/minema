@@ -5,6 +5,7 @@ import com.github.pupnewfster.minema_resurrection.cam.DynamicFOV;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.CubicInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IAdditionalAngleInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IPolarCoordinatesInterpolator;
+import com.github.pupnewfster.minema_resurrection.cam.interpolation.ITimeInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.Interpolator;
 import com.github.pupnewfster.minema_resurrection.cam.path.IPathChangeListener;
 import com.github.pupnewfster.minema_resurrection.cam.path.PathHandler;
@@ -60,13 +61,14 @@ public final class EventListener implements IPathChangeListener {
     public void onPathChange() {
         if (PathHandler.getWaypointSize() > 1) {
             Position[] path = PathHandler.getWaypoints();
-            Interpolator interpolater = new Interpolator(path, CubicInterpolator.instance, IPolarCoordinatesInterpolator.dummy, IAdditionalAngleInterpolator.dummy);
+            Interpolator interpolater = new Interpolator(path, CubicInterpolator.instance, IPolarCoordinatesInterpolator.dummy, IAdditionalAngleInterpolator.dummy,
+                  ITimeInterpolator.dummy);
 
             int iterations = getIterations(path);
 
             this.previewPoints = new Position[iterations];
             for (int i = 0; i < iterations; i++) {
-                this.previewPoints[i] = interpolater.getPoint((double) i / (iterations - 1));
+                this.previewPoints[i] = interpolater.getPoint(i, iterations - 1);
             }
         } else {
             this.previewPoints = null;

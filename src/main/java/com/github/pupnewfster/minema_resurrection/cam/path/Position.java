@@ -14,24 +14,26 @@ public final class Position extends Vec3 {
     public final float yaw;
     public final float roll;
     public final float fov;
+    public final long time;
 
-    public Position(double x, double y, double z, float pitch, float yaw, float roll, float fov) {
+    public Position(double x, double y, double z, float pitch, float yaw, float roll, float fov, long time) {
         super(x, y, z);
         this.pitch = pitch;
         this.yaw = yaw;
         this.roll = roll;
         this.fov = fov;
+        this.time = time;
     }
 
     @NotNull
     @Override
     public String toString() {
-        return this.x + padding + this.y + padding + this.z + padding + this.pitch + padding + this.yaw + padding + this.roll + padding + this.fov;
+        return this.x + padding + this.y + padding + this.z + padding + this.pitch + padding + this.yaw + padding + this.roll + padding + this.fov + padding + this.time;
     }
 
     public static Position fromString(String input, Consumer<Component> errorPrinter) {
         String[] parts = input.split(padding);
-        if (parts.length == 7) {
+        if (parts.length >= 7) {
             try {
                 double x = Double.parseDouble(parts[0]);
                 double y = Double.parseDouble(parts[1]);
@@ -40,7 +42,11 @@ public final class Position extends Vec3 {
                 float yaw = Float.parseFloat(parts[4]);
                 float roll = Float.parseFloat(parts[5]);
                 float fov = Float.parseFloat(parts[6]);
-                return new Position(x, y, z, pitch, yaw, roll, fov);
+                long time = -1;
+                if (parts.length == 8) {
+                    time = Long.parseLong(parts[7]);
+                }
+                return new Position(x, y, z, pitch, yaw, roll, fov, time);
             } catch (NumberFormatException ignored) {
             }
         }

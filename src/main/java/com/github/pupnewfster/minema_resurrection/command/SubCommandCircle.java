@@ -53,11 +53,11 @@ public class SubCommandCircle {
         for (int i = 0; i < circles; i++) {
             for (Vec3 point : circle) {
                 PathHandler.addWaypoint(new Position(playerPos.x + point.x * radius, playerPos.y, playerPos.z + point.z * radius,
-                      playerPos.pitch, playerPos.yaw, playerPos.roll, playerPos.fov));
+                      playerPos.pitch, playerPos.yaw, playerPos.roll, playerPos.fov, playerPos.time));
             }
         }
         PathHandler.addWaypoint(new Position(playerPos.x + rootPoint.x * radius, playerPos.y, playerPos.z + rootPoint.z * radius, playerPos.pitch, playerPos.yaw,
-              playerPos.roll, playerPos.fov));
+              playerPos.roll, playerPos.fov, playerPos.time));
         source.sendSuccess(Translations.COMMAND_PATH_CIRCLE_CREATED::translate, true);
         return circles;
     }

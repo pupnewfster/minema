@@ -10,6 +10,7 @@ public final class PositionBuilder {
     private PolarCoordinates polarCoordinates;
     private float roll;
     private float fov;
+    private long time = -1;
 
     public PositionBuilder setPosition(Vec3 position) {
         this.position = position;
@@ -31,6 +32,11 @@ public final class PositionBuilder {
         return this;
     }
 
+    public PositionBuilder setTime(long value) {
+        this.time = value;
+        return this;
+    }
+
     public Vec3 getPosition() {
         return this.position;
     }
@@ -41,6 +47,6 @@ public final class PositionBuilder {
 
     public Position build() {
         return new Position(this.position.x, this.position.y, this.position.z, this.polarCoordinates.pitch(),
-              this.polarCoordinates.yaw(), this.roll, this.fov);
+              this.polarCoordinates.yaw(), this.roll, this.fov, this.time);
     }
 }

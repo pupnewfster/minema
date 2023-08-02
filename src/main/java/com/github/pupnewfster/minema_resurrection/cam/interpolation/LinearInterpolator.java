@@ -5,7 +5,7 @@ import com.github.pupnewfster.minema_resurrection.cam.path.Position;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
-public final class LinearInterpolator implements IPositionInterpolator, IPolarCoordinatesInterpolator, IAdditionalAngleInterpolator {
+public final class LinearInterpolator implements IPositionInterpolator, IPolarCoordinatesInterpolator, IAdditionalAngleInterpolator, ITimeInterpolator {
 
     public static final LinearInterpolator instance = new LinearInterpolator();
 
@@ -19,12 +19,19 @@ public final class LinearInterpolator implements IPositionInterpolator, IPolarCo
 
     @Override
     public void interpolatePolarCoordinates(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
-        builder.setPolarCoordinates(new PolarCoordinates((float) Mth.lerp(step, y1.pitch, y2.pitch), (float) Mth.lerp(step, y1.yaw, y2.yaw)));
+        builder.setPolarCoordinates(new PolarCoordinates(Mth.lerp((float) step, y1.pitch, y2.pitch), (float) Mth.lerp(step, y1.yaw, y2.yaw)));
     }
 
     @Override
     public void interpolateAdditionAngles(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
-        builder.setRoll((float) Mth.lerp(step, y1.roll, y2.roll));
-        builder.setFov((float) Mth.lerp(step, y1.fov, y2.fov));
+        builder.setRoll(Mth.lerp((float) step, y1.roll, y2.roll));
+        builder.setFov(Mth.lerp((float) step, y1.fov, y2.fov));
+    }
+
+    @Override
+    public void interpolateTime(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
+        if (y1.time != -1 && y2.time != -1) {
+            builder.setTime(Math.round(Mth.lerp(step, y1.time, y2.time)));
+        }
     }
 }

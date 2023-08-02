@@ -4,9 +4,10 @@ import com.github.pupnewfster.minema_resurrection.cam.path.Position;
 
 public final class Interpolator {
 
-    private final IPositionInterpolator a;
-    private final IPolarCoordinatesInterpolator b;
-    private final IAdditionalAngleInterpolator c;
+    private final IPositionInterpolator positionInterpolator;
+    private final IPolarCoordinatesInterpolator polarCoordinatesInterpolator;
+    private final IAdditionalAngleInterpolator additionalAngleInterpolator;
+    private final ITimeInterpolator timeInterpolator;
 
     private final Position[] points;
 
@@ -15,16 +16,19 @@ public final class Interpolator {
      */
     private final int pathLength;
 
-    public Interpolator(Position[] points, IPositionInterpolator a, IPolarCoordinatesInterpolator b, IAdditionalAngleInterpolator c) {
+    public Interpolator(Position[] points, IPositionInterpolator positionInterpolator, IPolarCoordinatesInterpolator polarCoordinatesInterpolator,
+          IAdditionalAngleInterpolator additionalAngleInterpolator, ITimeInterpolator timeInterpolator) {
         this.points = points;
         this.pathLength = this.points.length - 1;
 
-        this.a = a;
-        this.b = b;
-        this.c = c;
+        this.positionInterpolator = positionInterpolator;
+        this.polarCoordinatesInterpolator = polarCoordinatesInterpolator;
+        this.additionalAngleInterpolator = additionalAngleInterpolator;
+        this.timeInterpolator = timeInterpolator;
     }
 
-    public Position getPoint(double pathPosition) {
+    public Position getPoint(long currentIteration, long iterations) {
+        double pathPosition = currentIteration / (double) iterations;
         double section = pathPosition * this.pathLength;
 
         int section1 = (int) section;
@@ -57,9 +61,10 @@ public final class Interpolator {
 
         PositionBuilder builder = new PositionBuilder();
 
-        this.a.interpolatePosition(builder, y0, y1, y2, y3, step);
-        this.b.interpolatePolarCoordinates(builder, y0, y1, y2, y3, step);
-        this.c.interpolateAdditionAngles(builder, y0, y1, y2, y3, step);
+        this.positionInterpolator.interpolatePosition(builder, y0, y1, y2, y3, step);
+        this.polarCoordinatesInterpolator.interpolatePolarCoordinates(builder, y0, y1, y2, y3, step);
+        this.additionalAngleInterpolator.interpolateAdditionAngles(builder, y0, y1, y2, y3, step);
+        this.timeInterpolator.interpolateTime(builder, y0, y1, y2, y3, step);
 
         return builder.build();
     }

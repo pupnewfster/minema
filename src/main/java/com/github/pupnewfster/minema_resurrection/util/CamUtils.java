@@ -30,7 +30,7 @@ public class CamUtils {
      * Do only call this method if a world is loaded!
      */
     public static Position getPosition(Player player) {
-        return new Position(player.getX(), player.getY(), player.getZ(), player.getXRot(), player.getYRot(), CameraRoll.roll, DynamicFOV.get());
+        return new Position(player.getX(), player.getY(), player.getZ(), player.getXRot(), player.getYRot(), CameraRoll.roll, DynamicFOV.get(), player.level().dayTime());
     }
 
     /**

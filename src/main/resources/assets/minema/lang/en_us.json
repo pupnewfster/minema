@@ -66,6 +66,7 @@
   "minema_resurrection.config.applyFOVModifiers.tooltip": "When Apply FOV Modifiers is disabled FOV modifiers will not be applied.",
   "minema_resurrection.config.applyFOVModifiersPath": "Apply FOV Modifiers While Pathing",
   "minema_resurrection.config.applyFOVModifiersPath.tooltip": "When Apply FOV Modifiers While Pathing is enabled FOV modifiers will be applied during pathing.",
+  "minema_resurrection.config.applyPathDayTime": "Applies and interpolates the current day time based on the time the points on the path were created.",
 
   "key.categories.minema_resurrection": "Minema  Resurrection",
   "key.minema_resurrection.capture": "Start/stop recording",

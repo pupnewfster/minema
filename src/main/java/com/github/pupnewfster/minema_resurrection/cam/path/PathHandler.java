@@ -6,6 +6,7 @@ import com.github.pupnewfster.minema_resurrection.cam.interpolation.CubicInterpo
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IAdditionalAngleInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IPolarCoordinatesInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.IPositionInterpolator;
+import com.github.pupnewfster.minema_resurrection.cam.interpolation.ITimeInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.Interpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.LinearInterpolator;
 import com.github.pupnewfster.minema_resurrection.cam.interpolation.TargetInterpolator;
@@ -66,13 +67,16 @@ public class PathHandler {
         boolean cmovLinear = pathCopy.length == 2;
         long iterations = frames * CamUtils.renderPhases;
 
-        IPositionInterpolator a = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
+        IPositionInterpolator positionInterpolator = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
 
-        IPolarCoordinatesInterpolator b = target == null ? cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance : new TargetInterpolator(target);
+        IPolarCoordinatesInterpolator polarCoordinatesInterpolator = target == null ? cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance : new TargetInterpolator(target);
 
-        IAdditionalAngleInterpolator c = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
+        IAdditionalAngleInterpolator additionalAngleInterpolator = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
 
-        ActivePath path = new ActiveInterpolatorPath(player, new Interpolator(pathCopy, a, b, c), iterations);
+        ITimeInterpolator timeInterpolator = cmovLinear ? LinearInterpolator.instance : CubicInterpolator.instance;
+
+        Interpolator interpolator = new Interpolator(pathCopy, positionInterpolator, polarCoordinatesInterpolator, additionalAngleInterpolator, timeInterpolator);
+        ActivePath path = new ActiveInterpolatorPath(player, interpolator, iterations);
         if (MinemaResurrection.instance.getConfig().delayStartUntilChunksLoaded.get()) {
             path = new DelayedPath(path);
         }

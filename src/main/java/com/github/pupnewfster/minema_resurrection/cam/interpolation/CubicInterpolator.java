@@ -4,7 +4,7 @@ import com.github.pupnewfster.minema_resurrection.cam.path.PolarCoordinates;
 import com.github.pupnewfster.minema_resurrection.cam.path.Position;
 import net.minecraft.world.phys.Vec3;
 
-public final class CubicInterpolator implements IPositionInterpolator, IPolarCoordinatesInterpolator, IAdditionalAngleInterpolator {
+public final class CubicInterpolator implements IPositionInterpolator, IPolarCoordinatesInterpolator, IAdditionalAngleInterpolator, ITimeInterpolator {
 
     public static final CubicInterpolator instance = new CubicInterpolator();
 
@@ -26,6 +26,13 @@ public final class CubicInterpolator implements IPositionInterpolator, IPolarCoo
     public void interpolateAdditionAngles(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
         builder.setRoll(cubic(y0.roll, y1.roll, y2.roll, y3.roll, (float) step));
         builder.setFov(cubic(y0.fov, y1.fov, y2.fov, y3.fov, (float) step));
+    }
+
+    @Override
+    public void interpolateTime(PositionBuilder builder, Position y0, Position y1, Position y2, Position y3, double step) {
+        if (y0.time != -1 && y1.time != -1 && y2.time != -1 && y3.time != -1) {
+            builder.setTime(Math.round(cubic(y0.time, y1.time, y2.time, y3.time, (float) step)));
+        }
     }
 
     /**
