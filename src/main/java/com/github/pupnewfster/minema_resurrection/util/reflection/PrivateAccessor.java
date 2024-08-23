@@ -2,7 +2,7 @@ package com.github.pupnewfster.minema_resurrection.util.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
-import net.coderbot.iris.uniforms.SystemTimeUniforms;
+import net.irisshaders.iris.uniforms.SystemTimeUniforms;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper.UnableToFindFieldException;
